@@ -30,6 +30,16 @@
 ./scripts/search.sh "关键词"
 ```
 
+## 网站
+
+本仓库包含一个位于 `docs/` 的静态知识库网站。更新 Markdown 内容后，运行：
+
+```bash
+python3 scripts/build-site.py
+```
+
+脚本会重新生成 `docs/data.json`，网站会自动展示最新内容。推送到 `main` 后，GitHub Actions 会部署到 GitHub Pages。
+
 ## 笔记格式
 
 推荐每篇笔记包含 YAML front matter：

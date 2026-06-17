@@ -1,0 +1,145 @@
+{
+  "generatedAt": "2026-06-17T20:28:06.233211+00:00",
+  "sections": [
+    {
+      "id": "inbox",
+      "title": "Inbox",
+      "dir": "00_Inbox",
+      "description": "临时收集箱"
+    },
+    {
+      "id": "notes",
+      "title": "Notes",
+      "dir": "10_Notes",
+      "description": "长期笔记"
+    },
+    {
+      "id": "projects",
+      "title": "Projects",
+      "dir": "20_Projects",
+      "description": "项目资料"
+    },
+    {
+      "id": "references",
+      "title": "References",
+      "dir": "30_References",
+      "description": "文章、PDF、网页摘要"
+    },
+    {
+      "id": "code",
+      "title": "Code",
+      "dir": "40_Code",
+      "description": "技术笔记和代码片段"
+    },
+    {
+      "id": "daily",
+      "title": "Daily",
+      "dir": "50_Daily",
+      "description": "每日记录"
+    },
+    {
+      "id": "templates",
+      "title": "Templates",
+      "dir": "templates",
+      "description": "常用模板"
+    }
+  ],
+  "notes": [
+    {
+      "id": "10_Notes--README",
+      "title": "Notes",
+      "section": "notes",
+      "sectionTitle": "Notes",
+      "path": "10_Notes/README.md",
+      "tags": "",
+      "created": "",
+      "source": "",
+      "excerpt": "Notes 长期笔记放在这里。每篇笔记尽量只表达一个主题，并通过标签和相关链接连接到其他笔记。",
+      "body": "# Notes\n\n长期笔记放在这里。每篇笔记尽量只表达一个主题，并通过标签和相关链接连接到其他笔记。\n"
+    },
+    {
+      "id": "20_Projects--README",
+      "title": "Projects",
+      "section": "projects",
+      "sectionTitle": "Projects",
+      "path": "20_Projects/README.md",
+      "tags": "",
+      "created": "",
+      "source": "",
+      "excerpt": "Projects 项目相关资料放在这里，包括需求、计划、会议记录、决策记录和复盘。",
+      "body": "# Projects\n\n项目相关资料放在这里，包括需求、计划、会议记录、决策记录和复盘。\n"
+    },
+    {
+      "id": "30_References--README",
+      "title": "References",
+      "section": "references",
+      "sectionTitle": "References",
+      "path": "30_References/README.md",
+      "tags": "",
+      "created": "",
+      "source": "",
+      "excerpt": "References 文章、PDF、网页、书籍和课程的摘要放在这里。建议保留来源链接和自己的理解。",
+      "body": "# References\n\n文章、PDF、网页、书籍和课程的摘要放在这里。建议保留来源链接和自己的理解。\n"
+    },
+    {
+      "id": "40_Code--README",
+      "title": "Code",
+      "section": "code",
+      "sectionTitle": "Code",
+      "path": "40_Code/README.md",
+      "tags": "",
+      "created": "",
+      "source": "",
+      "excerpt": "Code 技术笔记、命令片段、排错记录和代码示例放在这里。",
+      "body": "# Code\n\n技术笔记、命令片段、排错记录和代码示例放在这里。\n"
+    },
+    {
+      "id": "50_Daily--README",
+      "title": "Daily",
+      "section": "daily",
+      "sectionTitle": "Daily",
+      "path": "50_Daily/README.md",
+      "tags": "",
+      "created": "",
+      "source": "",
+      "excerpt": "Daily 每日记录放在这里。建议文件名使用 YYYYMMDD.md。",
+      "body": "# Daily\n\n每日记录放在这里。建议文件名使用 `YYYY-MM-DD.md`。\n"
+    },
+    {
+      "id": "templates--daily",
+      "title": "{{date}}",
+      "section": "templates",
+      "sectionTitle": "Templates",
+      "path": "templates/daily.md",
+      "tags": "[daily]",
+      "created": "{{date}}",
+      "source": "",
+      "excerpt": "{{date}} 今日重点 记录 想法 待整理",
+      "body": "# {{date}}\n\n## 今日重点\n\n- \n\n## 记录\n\n- \n\n## 想法\n\n- \n\n## 待整理\n\n-"
+    },
+    {
+      "id": "templates--note",
+      "title": "标题",
+      "section": "templates",
+      "sectionTitle": "Templates",
+      "path": "templates/note.md",
+      "tags": "[]",
+      "created": "",
+      "source": "",
+      "excerpt": "标题 摘要 关键点 我的理解 后续行动",
+      "body": "# 标题\n\n## 摘要\n\n## 关键点\n\n- \n\n## 我的理解\n\n- \n\n## 后续行动\n\n-"
+    },
+    {
+      "id": "templates--project",
+      "title": "项目名称",
+      "section": "templates",
+      "sectionTitle": "Templates",
+      "path": "templates/project.md",
+      "tags": "[project]",
+      "created": "",
+      "source": "",
+      "excerpt": "项目名称 目标 背景 计划 决策记录 复盘",
+      "body": "# 项目名称\n\n## 目标\n\n- \n\n## 背景\n\n- \n\n## 计划\n\n- \n\n## 决策记录\n\n- \n\n## 复盘\n\n-"
+    }
+  ]
+}
