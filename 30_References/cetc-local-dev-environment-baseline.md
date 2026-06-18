@@ -47,12 +47,18 @@
 | 工具 | 当前状态 | 说明 |
 | --- | --- | --- |
 | Java | 1.8.0_241 | 老 Maven 项目通常可接受 |
-| Maven | 未在 PATH 中发现 | `mvn package` 类流程暂时不可直接验证 |
+| Maven | 3.9.9 | 用户目录安装，入口 `/Users/cuizihao/.local/bin/mvn` |
 
 影响：
 
-- `cetc-moniwa-ui` 的 Maven 打包流程暂时不能直接跑，需要先补齐 Maven。
+- `cetc-moniwa-ui` 的 Maven 打包流程已经具备本机工具条件。
 - 纯前端 npm 流程不受 Maven 缺失影响。
+
+安装记录：
+
+- Homebrew 安装 Maven 时被过旧的 Xcode Command Line Tools 拦截。
+- 已改用 Apache Maven 3.9.9 二进制包安装到 `/Users/cuizihao/.local/tools/apache-maven-3.9.9`。
+- `/Users/cuizihao/.local/bin/mvn` 已软链接到 Maven 可执行文件，当前 PATH 已包含 `/Users/cuizihao/.local/bin`。
 
 ## 重点项目当前状态
 
@@ -78,7 +84,6 @@
 
 ### 优先级 2：补齐缺口
 
-- 安装或启用 Maven。
 - 为每个项目准备本地复现日志，不污染业务仓库。
 
 ### 优先级 3：形成项目内改进建议
@@ -92,4 +97,4 @@
 
 ## 当前判断
 
-这台 Mac 已经具备复现老前端项目的大部分基础条件，Node 8.9.4、8.17.0、10.24.1、12.22.12、14.21.3 都已经通过 nvm 安装。当前最大缺口是 Maven 不在 PATH。下一步可以开始检查 Maven/Java 可用性，然后逐个项目做安装验证。
+这台 Mac 已经具备复现老前端项目的大部分基础条件，Node 8.9.4、8.17.0、10.24.1、12.22.12、14.21.3 都已经通过 nvm 安装，Maven 也已在用户目录补齐。下一步可以开始逐个项目做安装验证。

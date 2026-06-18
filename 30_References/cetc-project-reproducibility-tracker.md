@@ -185,17 +185,16 @@ mvn package
 | npm ci | 待验证 | 有锁文件，优先 `npm ci` |
 | 开发服务 | 待验证 | 默认端口 10013 |
 | npm 构建 | 待验证 | 输出到 `target/public` |
-| Maven 可用性 | 待补齐 | 当前 `mvn` 不在 PATH |
+| Maven 可用性 | 已补齐 | Apache Maven 3.9.9，入口 `/Users/cuizihao/.local/bin/mvn` |
 | Maven 仓库可达 | 待验证 | 依赖 CETC 内网仓库 |
 | 是否产生文件改动 | 待验证 |  |
 
-## 后续 9 步建议
+## 后续 7 步建议
 
-1. 检查 Maven 安装和 PATH。
-2. 对 `cetc-moniwa-ui` 执行 `npm ci` 初筛。
-3. 对 `xinfang-web-admin` 执行 Node 12 下的安装验证。
-4. 对 `bi-ui` 执行 Node 10 下的文档站安装/启动验证。
-5. 对 `jun-dd-web` 执行 Node 10 下的安装验证。
-6. 汇总失败日志，归类为 Node 版本、依赖源、内网服务、构建脚本四类。
-7. 根据验证结果提出 `.nvmrc` 和 README 改进建议。
-8. 将验证结果同步到知识库网页并推送部署。
+1. 对 `cetc-moniwa-ui` 执行 `npm ci` 初筛。
+2. 对 `xinfang-web-admin` 执行 Node 12 下的安装验证。
+3. 对 `bi-ui` 执行 Node 10 下的文档站安装/启动验证。
+4. 对 `jun-dd-web` 执行 Node 10 下的安装验证。
+5. 汇总失败日志，归类为 Node 版本、依赖源、内网服务、构建脚本四类。
+6. 根据验证结果提出 `.nvmrc` 和 README 改进建议。
+7. 将验证结果同步到知识库网页并推送部署。
