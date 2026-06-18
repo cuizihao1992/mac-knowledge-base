@@ -14,6 +14,8 @@ related: [CETC 项目健康度报告, CETC Project 项目盘点]
 
 - `~/CETC/Project/xinfang/xinfang-web-admin`
 - `~/CETC/Project/cetc-ui/bi-ui`
+- `~/CETC/Project/jun-dd-web`
+- `~/CETC/Project/BeijingDaxing/cetc-moniwa-ui`
 
 只做静态分析，未安装依赖、未实际启动项目。
 
@@ -265,9 +267,235 @@ README.md
 4. 生成 lockfile，并记录可用 Node/npm 版本。
 5. 如果要继续维护组件库，先补最小示例和组件清单。
 
+## jun-dd-web
+
+### 基本定位
+
+- 路径：`~/CETC/Project/jun-dd-web`
+- 类型：CETC BI 可视化/组件化前端
+- 技术栈：Vue 2、Webpack 4、Element UI、ECharts、Mapbox GL、ArcGIS 外部资源、视频/图表/拖拽组件
+- 健康度问题：缺前端 lockfile、存在环境配置、存在构建产物、旧前端依赖、疑似敏感配置线索
+
+### 关键目录
+
+| 路径 | 作用 |
+| --- | --- |
+| `src/main.js` | 应用入口 |
+| `src/router/` | 页面和模块路由 |
+| `src/store/` | GIS、页面、数据集等状态模块 |
+| `src/common/api/` | 通用 API 模块 |
+| `src/components/` | 图表、弹窗、时间轴等组件 |
+| `src/modules/` | 业务/表单设计模块 |
+| `src/config.js` | GIS、Tinymce、Ace、HT 等外部资源映射 |
+| `build/webpack.config.js` | Webpack 构建配置 |
+| `build/tar.js` | 构建后打包脚本 |
+| `build/compressing.js` | 压缩脚本 |
+
+### 启动方式
+
+```bash
+cd /Users/cuizihao/CETC/Project/jun-dd-web
+npm install
+npm run dev
+```
+
+### 构建方式
+
+普通构建：
+
+```bash
+npm run build
+```
+
+完整生产构建：
+
+```bash
+npm run build:prd
+```
+
+`build:prd` 会依次执行：
+
+```text
+pack -> compress -> build
+```
+
+其中 `build` 会清理 `src/dist`，执行 Webpack 构建，然后运行 `build/tar.js`。
+
+### 外部资源配置
+
+`src/config.js` 当前使用：
+
+```text
+BaseUrl = /static
+```
+
+历史注释里有内网地址：
+
+```text
+http://10.0.14.49
+```
+
+依赖的外部资源包括：
+
+- GIS CSS/JS
+- ArcGIS JS API 4.13
+- ECharts layer
+- Tinymce
+- Ace
+- HT 相关脚本
+
+部署时必须保证 `/static/js/...` 下这些资源存在，否则 GIS、编辑器、HT 组件会加载失败。
+
+### 主要风险
+
+- 未发现 lockfile，依赖安装不可复现。
+- Vue 2、Webpack 4、Element UI、ECharts 4 体系偏旧。
+- `emmet` 依赖来自 GitHub，离线或网络受限时安装可能失败。
+- 构建链路包含自定义压缩和 tar 打包，不能只看 Webpack 输出。
+- 外部静态资源依赖强，迁移环境需要先确认 `/static` 资源目录。
+
+### 建议处理顺序
+
+1. 先确认当前线上/测试环境的 `/static` 资源来源。
+2. 记录可用 Node/npm 版本，并生成 lockfile。
+3. 明确 `build` 和 `build:prd` 的产物差异。
+4. 把 `src/config.js` 改为环境配置，而不是代码内写死。
+5. 补一份“部署目录结构”，重点记录 `src/dist`、压缩包和 `/static` 的关系。
+
+## cetc-moniwa-ui
+
+### 基本定位
+
+- 路径：`~/CETC/Project/BeijingDaxing/cetc-moniwa-ui`
+- 类型：大兴监测预警平台 UI
+- 技术栈：Vue 2.5、Webpack 3、Element UI、ECharts、ArcGIS/GIS、Maven frontend-maven-plugin
+- 健康度问题：缺 README、存在环境配置、存在构建产物、旧前端依赖、疑似敏感配置线索
+
+### 关键目录
+
+| 路径 | 作用 |
+| --- | --- |
+| `src/main.js` | 应用入口 |
+| `src/router/` | 路由配置 |
+| `src/store/` | Vuex 状态，包含 ArcGIS 相关模块 |
+| `src/api/` | 业务 API |
+| `src/utils/request.js` | 请求封装 |
+| `static/js/config.js` | SSO、侧边导航、全局运行配置 |
+| `config/index.js` | dev/build 端口、代理、输出目录 |
+| `config/dev.env.js` | 开发环境 API |
+| `config/prod.env.js` | 生产环境 API |
+| `pom.xml` | Maven 包装构建，安装指定 Node/npm 并运行 npm build |
+
+### 启动方式
+
+```bash
+cd /Users/cuizihao/CETC/Project/BeijingDaxing/cetc-moniwa-ui
+npm install
+npm run dev
+```
+
+开发端口：
+
+```text
+10013
+```
+
+开发服务 host：
+
+```text
+localhost
+```
+
+### 构建方式
+
+前端构建：
+
+```bash
+npm run build
+```
+
+Maven 包装构建：
+
+```bash
+mvn package
+```
+
+`pom.xml` 使用 `frontend-maven-plugin`：
+
+```text
+Node v8.9.4
+npm 5.6.0
+npm install
+npm run build
+```
+
+这说明该项目最好使用 Node 8/npm 5 复现构建环境。
+
+### 输出目录
+
+`config/index.js` 中生产构建输出到：
+
+```text
+target/public/
+```
+
+HTML 入口：
+
+```text
+target/public/index.html
+```
+
+静态资源目录：
+
+```text
+target/public/static/
+```
+
+### 接口和运行配置
+
+开发代理：
+
+```text
+/moniwa/v1 -> http://10.173.134.167
+```
+
+环境 API：
+
+```text
+BASE_API = http://10.217.17.75:10012/moniwa
+MAP_API = http://10.217.17.75:10012
+```
+
+SSO 配置在 `static/js/config.js`：
+
+```text
+sso = http://10.217.17.81:30009/api/sso/authentication/sso
+client_id = moniwa
+client_secret = moniwa
+```
+
+这里的 `client_secret` 需要人工确认是否只是公开前端占位值，还是实际敏感信息。
+
+### 主要风险
+
+- 无 README，项目恢复成本高。
+- Webpack 3、Vue 2.5、Node 8 生态很旧。
+- `static/js/config.js` 包含 SSO 地址、client 信息和大量导航配置。
+- API、地图、SSO 都写死内网地址。
+- Maven 构建依赖内网 Maven 仓库：`maven.cetccity.com:10001`。
+- 构建产物在 `target/public`，容易和 Java/Maven 产物混在一起。
+
+### 建议处理顺序
+
+1. 固化 Node 8.9.4/npm 5.6.0 环境，优先保证能复现 Maven 构建。
+2. 人工复核 `static/js/config.js` 中的 `client_secret`。
+3. 补 README，至少写明端口、API、SSO、构建产物。
+4. 将 API/SSO/地图地址抽成环境配置。
+5. 记录 `target/public` 如何被后端或部署系统消费。
+
 ## 共同建议
 
-这两个项目都是典型旧 Vue 2 体系。短期目标不应马上升级，而是先做到：
+这些项目都是典型旧 Vue 2 体系。短期目标不应马上升级，而是先做到：
 
 1. 可复现安装。
 2. 可本地启动。
