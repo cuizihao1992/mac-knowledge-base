@@ -14,7 +14,7 @@
 
 | 项目 | 当前分支 | 推荐 Node | 安装命令 | 首个验证命令 | 构建命令 | 初始状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| `xinfang/xinfang-web-admin` | `master` | 12.22.12，备选 14.21.3 | `npm install` | `npm run dev -- --port 8080` | `npm run build:prod` | 待验证 |
+| `xinfang/xinfang-web-admin` | `master` | 12.22.12，备选 14.21.3 | `npm install --package-lock=false` | `npm run build:prod` | `npm run build:prod` | 通过 |
 | `cetc-ui/bi-ui` | `sdk_0918_dev` | 10.24.1 | `npm install` | `npm run docs:dev` | `npm run docs:build` / `npm run pack` | 待验证 |
 | `jun-dd-web` | `202004_dev` | 10.24.1 | `npm install` | `npm run dev` | `npm run build` | 待验证 |
 | `BeijingDaxing/cetc-moniwa-ui` | `MXSSO` | 8.9.4 | `npm install` | `npm run build` | `npm run build` / `mvn package` | 部分通过 |
@@ -43,7 +43,7 @@ source ~/.nvm/nvm.sh
 nvm use 12.22.12
 node -v
 npm -v
-npm install
+npm install --package-lock=false --no-audit --no-fund
 npm run dev -- --port 8080
 npm run build:prod
 git status --short
@@ -53,12 +53,18 @@ git status --short
 
 | 检查点 | 结果 | 备注 |
 | --- | --- | --- |
-| Node 切换 | 待验证 |  |
-| 依赖安装 | 待验证 | 无锁文件，可能生成 `package-lock.json` |
-| 开发服务 | 待验证 | 默认端口 80，建议改用 8080 |
-| 构建 | 待验证 |  |
+| Node 切换 | 通过 | Node 12.22.12，npm 6.14.16 |
+| 依赖安装 | 通过 | 安装 2164 个包；使用 `--package-lock=false` 未保留锁文件 |
+| 开发服务 | 未执行 | 默认端口 80，建议手动改用 8080 验证 |
+| 构建 | 通过 | `npm run build:prod` 成功，输出 `dist` |
 | 业务接口 | 待验证 | 代理依赖内网后端 |
-| 是否产生文件改动 | 待验证 |  |
+| 是否产生文件改动 | 无需恢复 | `node_modules`、`dist`、`package-lock.json` 均被 `.gitignore` 忽略；工作区保持干净 |
+
+构建备注：
+
+- Vue CLI 构建成功，退出码 0。
+- 仅有 asset size / entrypoint size warning，未阻断构建。
+- `dist` 约 4.2M，`node_modules` 约 420M。
 
 ### cetc-ui / bi-ui
 
