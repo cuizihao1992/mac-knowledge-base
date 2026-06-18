@@ -16,7 +16,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | `xinfang/xinfang-web-admin` | `master` | 12.22.12，备选 14.21.3 | `npm install --package-lock=false` | `npm run build:prod` | `npm run build:prod` | 通过 |
 | `cetc-ui/bi-ui` | `sdk_0918_dev` | 10.24.1 | `npm install --package-lock=false` | `npm run docs:build` | `npm run docs:build` / `npm run pack` | 部分通过 |
-| `jun-dd-web` | `202004_dev` | 10.24.1 | `npm install` | `npm run dev` | `npm run build` | 待验证 |
+| `jun-dd-web` | `202004_dev` | 10.24.1 | `npm install --package-lock=false` | `npm run build` | `npm run build` | 部分通过 |
 | `BeijingDaxing/cetc-moniwa-ui` | `MXSSO` | 8.9.4 | `npm install` | `npm run build` | `npm run build` / `mvn package` | 部分通过 |
 
 ## 逐项记录
@@ -152,7 +152,7 @@ source ~/.nvm/nvm.sh
 nvm use 10.24.1
 node -v
 npm -v
-npm install
+npm install --package-lock=false --no-audit --no-fund
 npm run dev
 npm run build
 git status --short
@@ -162,12 +162,41 @@ git status --short
 
 | 检查点 | 结果 | 备注 |
 | --- | --- | --- |
-| Node 切换 | 待验证 |  |
-| 依赖安装 | 待验证 | 无锁文件，项目体积约 1.4G |
+| Node 切换 | 通过 | Node 10.24.1，npm 6.14.12 |
+| 依赖安装 | 通过 | 安装 4049 个包；`node_modules` 约 853M |
 | 开发服务 | 待验证 | 多个内网代理路径 |
-| 构建 | 待验证 | `build` 会继续执行 `tar` |
+| 构建 | 失败 | Webpack 报缺依赖和现代语法解析失败，随后 `tar` 找不到 `dist` |
 | GIS 静态资源 | 待验证 | 内置 ArcGIS JS API 4.13 |
-| 是否产生文件改动 | 待验证 |  |
+| 是否产生文件改动 | 无需恢复 | `node_modules`、`package-lock.json` 被 `.gitignore` 忽略；工作区保持干净 |
+
+构建失败摘录：
+
+```text
+ERROR in ./src/modules/FormDesign/components/Container.vue
+Module not found: Error: Can't resolve 'clipboard'
+
+ERROR in ./node_modules/pdfjs-dist/build/pdf.js
+Module parse failed: Unexpected character '#'
+
+ERROR in ./node_modules/@shopify/draggable/build/esm/shared/utils/closest/closest.mjs
+Module parse failed: Unexpected token
+
+/bin/sh: cd: /Users/cuizihao/CETC/Project/jun-dd-web/dist: No such file or directory
+```
+
+实际依赖版本：
+
+| 包 | 实际版本 | 影响 |
+| --- | --- | --- |
+| `clipboard` | 未安装 | 代码中 `import Clipboard from "clipboard"`，但 `package.json` 未声明 |
+| `pdfjs-dist` | 2.16.105 | 包含私有字段语法，当前 Webpack/Babel 链路无法解析 |
+| `@shopify/draggable` | 1.2.1 | 包含可选链语法，当前 Webpack/Babel 链路无法解析 |
+
+判断：
+
+- 安装链路可用，但无锁文件导致依赖解析到过新的版本。
+- 构建失败至少包含三类问题：缺失直接依赖、现代 JS 语法未转译、产物目录与 `tar` 脚本路径不一致。
+- 优先修复方向是补 `clipboard`，并固定 `pdfjs-dist`、`@shopify/draggable` 到项目年代兼容版本；随后再单独检查 `build/tar.js` 的目录假设。
 
 ### BeijingDaxing / cetc-moniwa-ui
 
