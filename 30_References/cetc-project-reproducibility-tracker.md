@@ -14,10 +14,10 @@
 
 | 项目 | 当前分支 | 推荐 Node | 安装命令 | 首个验证命令 | 构建命令 | 初始状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| `xinfang/xinfang-web-admin` | `master` | 12.22.12 | `npm install` | `npm run dev -- --port 8080` | `npm run build:prod` | 待验证 |
+| `xinfang/xinfang-web-admin` | `master` | 12.22.12，备选 14.21.3 | `npm install` | `npm run dev -- --port 8080` | `npm run build:prod` | 待验证 |
 | `cetc-ui/bi-ui` | `sdk_0918_dev` | 10.24.1 | `npm install` | `npm run docs:dev` | `npm run docs:build` / `npm run pack` | 待验证 |
 | `jun-dd-web` | `202004_dev` | 10.24.1 | `npm install` | `npm run dev` | `npm run build` | 待验证 |
-| `BeijingDaxing/cetc-moniwa-ui` | `MXSSO` | 8.17.0 初筛，8.9.4 精确复现 | `npm ci` | `npm run dev` | `npm run build` / `mvn package` | 待验证 |
+| `BeijingDaxing/cetc-moniwa-ui` | `MXSSO` | 8.9.4 | `npm ci` | `npm run dev` | `npm run build` / `mvn package` | 待验证 |
 
 ## 逐项记录
 
@@ -34,7 +34,7 @@
 | 锁文件 | 无 |
 | 环境文件 | 无 `.nvmrc` / `.node-version` / `.tool-versions` |
 | 首选 Node | `v12.22.12` |
-| 备选 Node | `v14.21.3`，当前未安装 |
+| 备选 Node | `v14.21.3`，当前已安装 |
 
 验证步骤：
 
@@ -152,15 +152,15 @@ git status --short
 | 引擎声明 | `node >=6.0.0`，`npm >=3.0.0` |
 | 锁文件 | 有 `package-lock.json` |
 | 环境文件 | 无 `.nvmrc` / `.node-version` / `.tool-versions` |
-| 首选 Node | `v8.9.4`，当前未安装 |
-| 初筛 Node | `v8.17.0`，当前已安装 |
+| 首选 Node | `v8.9.4`，当前已安装 |
+| 补充 Node | `v8.17.0`，当前已安装 |
 | Maven 前端插件 | Node `v8.9.4`，npm `5.6.0` |
 
 验证步骤：
 
 ```bash
 source ~/.nvm/nvm.sh
-nvm use 8.17.0
+nvm use 8.9.4
 node -v
 npm -v
 npm ci
@@ -180,8 +180,8 @@ mvn package
 
 | 检查点 | 结果 | 备注 |
 | --- | --- | --- |
-| Node 切换 | 待验证 | 先用 8.17.0 初筛 |
-| 精确 Node 8.9.4 | 待补齐 | 与 `pom.xml` 一致 |
+| Node 切换 | 待验证 | 使用 8.9.4，与 `pom.xml` 一致 |
+| 精确 Node 8.9.4 | 已补齐 | npm 为 5.6.0 |
 | npm ci | 待验证 | 有锁文件，优先 `npm ci` |
 | 开发服务 | 待验证 | 默认端口 10013 |
 | npm 构建 | 待验证 | 输出到 `target/public` |
@@ -191,12 +191,11 @@ mvn package
 
 ## 后续 9 步建议
 
-1. 检查并补齐 Node 8.9.4、14.21.3。
-2. 检查 Maven 安装和 PATH。
-3. 对 `cetc-moniwa-ui` 执行 `npm ci` 初筛。
-4. 对 `xinfang-web-admin` 执行 Node 12 下的安装验证。
-5. 对 `bi-ui` 执行 Node 10 下的文档站安装/启动验证。
-6. 对 `jun-dd-web` 执行 Node 10 下的安装验证。
-7. 汇总失败日志，归类为 Node 版本、依赖源、内网服务、构建脚本四类。
-8. 根据验证结果提出 `.nvmrc` 和 README 改进建议。
-9. 将验证结果同步到知识库网页并推送部署。
+1. 检查 Maven 安装和 PATH。
+2. 对 `cetc-moniwa-ui` 执行 `npm ci` 初筛。
+3. 对 `xinfang-web-admin` 执行 Node 12 下的安装验证。
+4. 对 `bi-ui` 执行 Node 10 下的文档站安装/启动验证。
+5. 对 `jun-dd-web` 执行 Node 10 下的安装验证。
+6. 汇总失败日志，归类为 Node 版本、依赖源、内网服务、构建脚本四类。
+7. 根据验证结果提出 `.nvmrc` 和 README 改进建议。
+8. 将验证结果同步到知识库网页并推送部署。

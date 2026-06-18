@@ -27,17 +27,20 @@
 
 | 版本 | 状态 | 对 CETC 项目的意义 |
 | --- | --- | --- |
-| v8.17.0 | 已安装 | 可初步验证 `cetc-moniwa-ui`，但不是 `pom.xml` 精确声明的 v8.9.4 |
+| v8.9.4 | 已安装 | 精确匹配 `cetc-moniwa-ui` 的 `pom.xml` 声明，npm 为 5.6.0 |
+| v8.17.0 | 已安装 | 可作为 Node 8 LTS 补充验证环境 |
 | v10.24.1 | 已安装 | 适合初步验证 `bi-ui`、`jun-dd-web` |
 | v12.22.12 | 已安装 | 适合初步验证 `xinfang-web-admin`、`bi-ui`、`jun-dd-web` |
+| v14.21.3 | 已安装 | 可作为 `xinfang-web-admin` 的备选现代 LTS 验证环境 |
 | v18.18.0 | 已安装 | 可用于新项目，不建议作为老 Vue 项目的首选 |
 | v20.10.0 | 当前默认 | 对老 Vue/Webpack 项目风险较高 |
 | v22.14.0 / v22.22.0 | 已安装 | 不建议用于首轮复现老项目 |
 
-建议补齐：
+已补齐：
 
 - `v8.9.4`：匹配 `BeijingDaxing/cetc-moniwa-ui/pom.xml` 中的 frontend-maven-plugin 配置。
 - `v14.21.3`：作为 `xinfang-web-admin` 的备选现代 LTS 验证环境。
+- 默认 Node 仍保持为 `v20.10.0`。
 
 ## Java / Maven
 
@@ -68,7 +71,7 @@
 
 建议顺序：
 
-1. `cetc-moniwa-ui`：使用 Node 8.17.0 初筛，后续补 Node 8.9.4 做精确复现。
+1. `cetc-moniwa-ui`：使用 Node 8.9.4 做精确复现。
 2. `xinfang-web-admin`：使用 Node 12.22.12。
 3. `bi-ui`：使用 Node 10.24.1。
 4. `jun-dd-web`：使用 Node 10.24.1。
@@ -76,8 +79,6 @@
 ### 优先级 2：补齐缺口
 
 - 安装或启用 Maven。
-- 安装 Node 8.9.4。
-- 安装 Node 14.21.3。
 - 为每个项目准备本地复现日志，不污染业务仓库。
 
 ### 优先级 3：形成项目内改进建议
@@ -91,4 +92,4 @@
 
 ## 当前判断
 
-这台 Mac 已经具备复现老前端项目的大部分基础条件，尤其是 Node 8/10/12 已经通过 nvm 安装。最大缺口是 Maven 不在 PATH，以及 `cetc-moniwa-ui` 精确声明的 Node 8.9.4 尚未安装。下一步可以开始给 4 个重点项目建立逐项复现记录表。
+这台 Mac 已经具备复现老前端项目的大部分基础条件，Node 8.9.4、8.17.0、10.24.1、12.22.12、14.21.3 都已经通过 nvm 安装。当前最大缺口是 Maven 不在 PATH。下一步可以开始检查 Maven/Java 可用性，然后逐个项目做安装验证。
