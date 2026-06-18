@@ -65,7 +65,7 @@ def main() -> None:
             fallback = file_path.stem
             notes.append(
                 {
-                    "id": relative_path.replace("/", "--").removesuffix(".md"),
+                    "id": relative_path.replace("/", "--")[:-3],
                     "title": meta.get("title") or title_from_body(body, fallback),
                     "section": section["id"],
                     "sectionTitle": section["title"],
