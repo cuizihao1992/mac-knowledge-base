@@ -15,7 +15,7 @@
 | 项目 | 当前分支 | 推荐 Node | 安装命令 | 首个验证命令 | 构建命令 | 初始状态 |
 | --- | --- | --- | --- | --- | --- | --- |
 | `xinfang/xinfang-web-admin` | `master` | 12.22.12，备选 14.21.3 | `npm install --package-lock=false` | `npm run build:prod` | `npm run build:prod` | 通过 |
-| `cetc-ui/bi-ui` | `sdk_0918_dev` | 10.24.1 | `npm install` | `npm run docs:dev` | `npm run docs:build` / `npm run pack` | 待验证 |
+| `cetc-ui/bi-ui` | `sdk_0918_dev` | 10.24.1 | `npm install --package-lock=false` | `npm run docs:build` | `npm run docs:build` / `npm run pack` | 部分通过 |
 | `jun-dd-web` | `202004_dev` | 10.24.1 | `npm install` | `npm run dev` | `npm run build` | 待验证 |
 | `BeijingDaxing/cetc-moniwa-ui` | `MXSSO` | 8.9.4 | `npm install` | `npm run build` | `npm run build` / `mvn package` | 部分通过 |
 
@@ -88,7 +88,7 @@ source ~/.nvm/nvm.sh
 nvm use 10.24.1
 node -v
 npm -v
-npm install
+npm install --package-lock=false --no-audit --no-fund
 npm run docs:dev
 npm run docs:build
 npm run pack
@@ -99,13 +99,36 @@ git status --short
 
 | 检查点 | 结果 | 备注 |
 | --- | --- | --- |
-| Node 切换 | 待验证 |  |
-| 依赖安装 | 待验证 | 无锁文件，依赖体量大 |
+| Node 切换 | 通过 | Node 10.24.1，npm 6.14.12 |
+| 依赖安装 | 通过 | 安装 4108 个包；`node_modules` 约 975M |
 | 文档站启动 | 待验证 | `docs:dev` 风险低于 demo |
-| 文档站构建 | 待验证 | `docs:build` |
+| 文档站构建 | 失败 | `stylus-loader` 报 `Cannot read property 'stylus' of undefined` |
 | 组件打包 | 待验证 | `pack` |
 | demo 启动 | 待验证 | 代理依赖内网 `/biapi` |
-| 是否产生文件改动 | 待验证 |  |
+| 是否产生文件改动 | 无需恢复 | `node_modules`、`package-lock.json` 被 `.gitignore` 忽略；工作区保持干净 |
+
+构建失败摘录：
+
+```text
+Module build failed (from ./node_modules/stylus-loader/index.js):
+TypeError: Cannot read property 'stylus' of undefined
+Error: Failed to compile with errors.
+```
+
+实际依赖版本：
+
+| 包 | 实际版本 |
+| --- | --- |
+| `vuepress` | 1.9.10 |
+| `@vuepress/core` | 1.9.10 |
+| `stylus-loader` | 3.0.1 |
+| `stylus` | 0.54.5 |
+
+判断：
+
+- 安装链路可用，但无锁文件导致依赖解析不可控。
+- 安装过程中出现多项 engine mismatch，例如 Cesium 相关依赖要求 Node 22，说明当前依赖树已经被解析到过新的包。
+- 文档站失败集中在 VuePress / Stylus loader 链路，优先尝试固定 `stylus-loader`、`stylus` 或恢复历史锁文件。
 
 ### jun-dd-web
 
