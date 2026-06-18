@@ -7,34 +7,50 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">Personal Markdown Library</p>
-        <h1>Mac Knowledge Base</h1>
-      </div>
-      <a class="repo-link" href="https://github.com/cuizihao1992/mac-knowledge-base">GitHub</a>
-    </header>
+    <header class="site-header">
+      <nav class="site-nav" aria-label="站点导航">
+        <a class="brand" href="./">
+          <span class="brand-mark">KB</span>
+          <span>Mac Knowledge Base</span>
+        </a>
+        <a class="repo-link" href="https://github.com/cuizihao1992/mac-knowledge-base">GitHub</a>
+      </nav>
 
-    <main class="layout">
-      <aside class="sidebar" aria-label="知识库分类">
-        <div class="search-wrap">
-          <label for="search">搜索</label>
+      <section class="hero">
+        <p class="eyebrow">Personal Markdown Library</p>
+        <h1>知识、项目和代码线索的本地索引</h1>
+        <p class="hero-copy">用搜索、分类和清晰的阅读视图快速找到 Mac 上沉淀的内容。</p>
+        <div class="hero-search">
+          <label for="search">搜索知识库</label>
           <input id="search" type="search" placeholder="输入关键词、标签或路径" autocomplete="off" />
         </div>
-        <nav id="sections" class="sections"></nav>
-      </aside>
+      </section>
+    </header>
 
-      <section class="content">
-        <div class="stats" id="stats"></div>
-        <div id="notes" class="notes"></div>
+    <main>
+      <section class="section-strip" aria-label="知识库分类">
+        <nav id="sections" class="sections"></nav>
       </section>
 
-      <article class="reader" id="reader" aria-live="polite">
-        <div class="reader-empty">
-          <h2>选择一篇内容</h2>
-          <p>从左侧搜索或在列表中打开笔记。</p>
-        </div>
-      </article>
+      <section class="workspace">
+        <aside class="note-panel" id="notePanel">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">Library</p>
+              <h2>内容列表</h2>
+            </div>
+            <div class="stats" id="stats"></div>
+          </div>
+          <div id="notes" class="notes"></div>
+        </aside>
+
+        <article class="reader" id="reader" aria-live="polite">
+          <div class="reader-empty">
+            <h2>选择一篇内容</h2>
+            <p>从列表中打开笔记，正文会在这里显示。</p>
+          </div>
+        </article>
+      </section>
     </main>
 
     <script src="./app.js"></script>

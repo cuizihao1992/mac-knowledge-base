@@ -28,12 +28,33 @@ function markdownToHtml(markdown) {
   let inList = false;
   let inCode = false;
   let code = [];
+  let table = [];
 
   const flushList = () => {
     if (inList) {
       html.push("</ul>");
       inList = false;
     }
+  };
+
+  const flushTable = () => {
+    if (!table.length) return;
+    const rows = table.filter((row) => !/^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(row));
+    if (rows.length) {
+      html.push("<table>");
+      rows.forEach((row, index) => {
+        const cells = row
+          .trim()
+          .replace(/^\|/, "")
+          .replace(/\|$/, "")
+          .split("|")
+          .map((cell) => cell.trim());
+        const tag = index === 0 ? "th" : "td";
+        html.push(`<tr>${cells.map((cell) => `<${tag}>${inline(cell)}</${tag}>`).join("")}</tr>`);
+      });
+      html.push("</table>");
+    }
+    table = [];
   };
 
   const inline = (text) =>
@@ -59,6 +80,14 @@ function markdownToHtml(markdown) {
       code.push(line);
       return;
     }
+
+    if (/^\s*\|.+\|\s*$/.test(line)) {
+      flushList();
+      table.push(line);
+      return;
+    }
+
+    flushTable();
 
     if (/^###\s+/.test(line)) {
       flushList();
@@ -92,6 +121,7 @@ function markdownToHtml(markdown) {
     html.push(`<p>${inline(line)}</p>`);
   });
 
+  flushTable();
   flushList();
   return html.join("");
 }
@@ -153,19 +183,34 @@ function renderNotes() {
     .join("");
 }
 
-function renderReader(note) {
+function renderReader(note, options = {}) {
   if (!note) return;
+  const { updateHash = true, enterReading = true } = options;
   state.activeId = note.id;
   els.reader.innerHTML = `
-    <h2>${escapeHtml(note.title)}</h2>
-    <div class="reader-meta">
-      <span>${escapeHtml(note.sectionTitle)}</span>
-      <span>${escapeHtml(note.path)}</span>
-      ${note.tags ? `<span>${escapeHtml(note.tags)}</span>` : ""}
+    <div class="reader-shell">
+      <div class="reader-top">
+        <button class="back-button" type="button" data-back>返回列表</button>
+      </div>
+      <h2>${escapeHtml(note.title)}</h2>
+      <div class="reader-meta">
+        <span>${escapeHtml(note.sectionTitle)}</span>
+        <span>${escapeHtml(note.path)}</span>
+        ${note.tags ? `<span>${escapeHtml(note.tags)}</span>` : ""}
+      </div>
+      <div class="reader-body">${markdownToHtml(note.body)}</div>
     </div>
-    <div class="reader-body">${markdownToHtml(note.body)}</div>
   `;
+  if (enterReading) {
+    document.body.classList.add("reading");
+  }
+  if (updateHash) {
+    history.replaceState(null, "", `#${encodeURIComponent(note.id)}`);
+  }
   renderNotes();
+  if (enterReading && window.matchMedia("(max-width: 900px)").matches) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 }
 
 function bindEvents() {
@@ -187,6 +232,12 @@ function bindEvents() {
     if (!button) return;
     renderReader(state.data.notes.find((note) => note.id === button.dataset.id));
   });
+
+  els.reader.addEventListener("click", (event) => {
+    if (!event.target.closest("[data-back]")) return;
+    document.body.classList.remove("reading");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 }
 
 fetch("./data.json")
@@ -196,7 +247,16 @@ fetch("./data.json")
     renderSections();
     renderNotes();
     bindEvents();
-    if (data.notes[0]) renderReader(data.notes[0]);
+    const idFromHash = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+    const selectedFromHash = data.notes.find((note) => note.id === idFromHash);
+    const isMobile = window.matchMedia("(max-width: 900px)").matches;
+    const selected = selectedFromHash || data.notes[0];
+    if (selected) {
+      renderReader(selected, {
+        updateHash: Boolean(selectedFromHash),
+        enterReading: Boolean(selectedFromHash) || !isMobile,
+      });
+    }
   })
   .catch(() => {
     els.notes.innerHTML = '<div class="empty-state">无法加载知识库索引。</div>';
