@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-18T05:44:37.462696+00:00",
+  "generatedAt": "2026-06-18T09:48:56.193998+00:00",
   "sections": [
     {
       "id": "inbox",
@@ -80,6 +80,18 @@
       "source": "",
       "excerpt": "References 文章、PDF、网页、书籍和课程的摘要放在这里。建议保留来源链接和自己的理解。",
       "body": "# References\n\n文章、PDF、网页、书籍和课程的摘要放在这里。建议保留来源链接和自己的理解。\n"
+    },
+    {
+      "id": "30_References--cetc-key-project-runbook",
+      "title": "CETC 重点项目运行手册",
+      "section": "references",
+      "sectionTitle": "References",
+      "path": "30_References/cetc-key-project-runbook.md",
+      "tags": "[reference, code, cetc, runbook]",
+      "created": "2026-06-18",
+      "source": "/Users/cuizihao/CETC/Project",
+      "excerpt": "CETC 重点项目运行手册 说明 本手册优先整理健康度报告里的 D 级项目。当前覆盖： ~/CETC/Project/xinfang/xinfangwebadmin ~/CETC/Project/cetcui/biui 只做静态分析，未安装依赖、未实际启动项目。 xinfangwebadmin 基本定位 路径：~/CETC/Project/xinfang/x",
+      "body": "# CETC 重点项目运行手册\n\n## 说明\n\n本手册优先整理健康度报告里的 D 级项目。当前覆盖：\n\n- `~/CETC/Project/xinfang/xinfang-web-admin`\n- `~/CETC/Project/cetc-ui/bi-ui`\n\n只做静态分析，未安装依赖、未实际启动项目。\n\n## xinfang-web-admin\n\n### 基本定位\n\n- 路径：`~/CETC/Project/xinfang/xinfang-web-admin`\n- 类型：分析预警系统管理后台\n- 来源模板：RuoYi-Vue\n- 技术栈：Vue 2.6.10、Vue CLI 4.4、Element UI 2.13、ECharts 4、Axios 0.18\n- 健康度问题：缺前端 lockfile、存在环境配置、存在构建产物、旧前端依赖、疑似敏感配置线索\n\n### 关键目录\n\n| 路径 | 作用 |\n| --- | --- |\n| `src/main.js` | 应用入口 |\n| `src/router/index.js` | 路由配置 |\n| `src/store/` | Vuex 状态 |\n| `src/api/` | API 模块 |\n| `src/utils/request.js` | Axios 实例、token 注入、响应拦截 |\n| `src/settings.js` | 后台标题和布局配置 |\n| `vue.config.js` | Vue CLI、代理、构建配置 |\n| `.env.development` | 开发环境变量 |\n| `.env.production` | 生产环境变量 |\n| `.env.staging` | 测试环境变量 |\n\n### 启动方式\n\n```bash\ncd /Users/cuizihao/CETC/Project/xinfang/xinfang-web-admin\nnpm install\nnpm run dev\n```\n\nREADME 里说明浏览器访问：\n\n```text\nhttp://localhost:80\n```\n\n`vue.config.js` 中端口逻辑：\n\n```text\nprocess.env.port || process.env.npm_config_port || 80\n```\n\n如果 80 端口权限或占用有问题，可用：\n\n```bash\nnpm run dev -- --port 8080\n```\n\n### 构建方式\n\n```bash\nnpm run build:stage\nnpm run build:prod\n```\n\n构建输出：\n\n```text\ndist/\n```\n\n静态资源目录：\n\n```text\ndist/static/\n```\n\n部署路径固定为：\n\n```text\n/admin\n```\n\n### 接口配置\n\n环境变量：\n\n| 环境 | VUE_APP_BASE_API |\n| --- | --- |\n| development | `/cetc/api` |\n| staging | `/stage-api` |\n| production | 空字符串 |\n\n开发代理在 `vue.config.js`：\n\n```text\n/cetc/api -> http://10.0.13.68:8080\n```\n\nAxios 基础地址在 `src/utils/request.js`：\n\n```text\nbaseURL: process.env.VUE_APP_BASE_API\n```\n\n请求 token 头：\n\n```text\nAuthorization: Bearer <token>\n```\n\n### 主要风险\n\n- 依赖较旧：Vue 2、Element UI、Axios 0.18、Vue CLI 4。\n- 未发现前端 lockfile，重新安装依赖可能产生不可复现结果。\n- 生产环境 `VUE_APP_BASE_API` 为空，依赖部署路径或后端同源配置。\n- 开发代理写死内网地址 `10.0.13.68:8080`。\n- 项目中有 `.env.*`，需要确认是否包含真实生产配置。\n\n### 建议处理顺序\n\n1. 补齐 lockfile：在可运行 Node 版本下生成 `package-lock.json` 或 `pnpm-lock.yaml`。\n2. 明确推荐 Node 版本，建议先从 Node 12/14 试起。\n3. 把 `10.0.13.68:8080` 改为通过环境变量配置。\n4. 写一份最小启动说明，记录后端依赖、账号、接口路径。\n5. 如果继续维护，规划 Vue 2/Element UI 迁移或至少冻结依赖。\n\n## bi-ui\n\n### 基本定位\n\n- 路径：`~/CETC/Project/cetc-ui/bi-ui`\n- 类型：CETC BI / COMPASS-UI 组件库和示例工程\n- 技术栈：Vue 2、Webpack 4、VuePress 1、Element UI、ECharts、Mapbox GL、ArcGIS JS API 外部资源\n- 健康度问题：缺本地启动脚本、缺前端 lockfile、存在环境配置、存在构建产物、旧前端依赖、疑似敏感配置线索\n\n### 关键目录\n\n| 路径 | 作用 |\n| --- | --- |\n| `src/components/` | 组件库源码 |\n| `src/pages/` | 示例/页面 |\n| `src/router/` | 示例路由 |\n| `src/store/` | 示例状态管理 |\n| `src/common/api/` | 通用 API |\n| `src/common/request/` | 请求封装 |\n| `src/config.js` | 外部静态资源地址 |\n| `build/` | Webpack 构建配置 |\n| `docs/` | VuePress 文档 |\n| `docs/.vuepress/config.js` | 文档站配置 |\n\n### 脚本现状\n\n`package.json` 中存在：\n\n```text\ndocs:dev\ndocs:build\ndemo:dev\ndemo:build\nlint\npack\nbuild:prd\n```\n\nREADME 写的是：\n\n```bash\nnpm run dev\nnpm run build\n```\n\n但 `package.json` 里没有 `dev` 和 `build` 脚本。这是当前最大启动坑。\n\n### 推荐启动方式\n\n启动文档站：\n\n```bash\ncd /Users/cuizihao/CETC/Project/cetc-ui/bi-ui\nnpm install\nnpm run docs:dev\n```\n\n启动示例工程：\n\n```bash\nnpm run demo:dev\n```\n\n打包组件库：\n\n```bash\nnpm run pack\n```\n\n构建文档：\n\n```bash\nnpm run docs:build\n```\n\n### 外部资源配置\n\n`src/config.js` 写死了资源根地址：\n\n```text\nhttp://10.0.14.49\n```\n\n依赖的外部资源包括：\n\n- ArcGIS JS API 4.13\n- GIS CSS/JS\n- ECharts layer\n- Tinymce\n- Ace\n- HT 相关脚本\n\n如果不在对应内网环境，GIS/编辑器/HT 相关组件大概率加载失败。\n\n### 构建产物\n\n组件库主入口：\n\n```text\nlib/compass-ui.common.js\n```\n\n发布文件范围包含：\n\n```text\nbuild/\ndist/\nsrc/\nREADME.md\n```\n\n### 主要风险\n\n- README 启动命令与实际 scripts 不一致。\n- 未发现 lockfile，依赖安装不可复现。\n- Webpack 4、Vue 2、Element UI、VuePress 1 都偏旧。\n- 依赖里有 `emmet` GitHub 源，离线或网络不通时安装可能失败。\n- 外部资源地址硬编码为 `10.0.14.49`。\n- `src/config.js` 是运行关键配置，迁移环境必须先处理。\n\n### 建议处理顺序\n\n1. 修正 README，把 `npm run dev/build` 改成 `docs:dev`、`demo:dev`、`pack`、`docs:build`。\n2. 明确项目到底是“组件库优先”还是“示例工程优先”。\n3. 把 `src/config.js` 的 `BaseUrl` 改为环境变量或独立配置文件。\n4. 生成 lockfile，并记录可用 Node/npm 版本。\n5. 如果要继续维护组件库，先补最小示例和组件清单。\n\n## 共同建议\n\n这两个项目都是典型旧 Vue 2 体系。短期目标不应马上升级，而是先做到：\n\n1. 可复现安装。\n2. 可本地启动。\n3. 配置外置。\n4. README 与真实脚本一致。\n5. 明确后端和外部静态资源依赖。"
     },
     {
       "id": "30_References--cetc-project-health-report",
