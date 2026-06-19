@@ -60,6 +60,22 @@ python3 scripts/build-corpus.py
 
 后续可以把 `data/chunks.jsonl` 送入 embedding 模型，再导入 Chroma、FAISS 或 LanceDB。
 
+## 本地向量检索
+
+生成第一版离线向量索引：
+
+```bash
+python3 scripts/build-vector-index.py
+```
+
+检索示例：
+
+```bash
+python3 scripts/search-vector.py "jun-dd-web 为什么构建失败"
+```
+
+当前实现是零 API key 的本地哈希向量索引，适合先把 RAG 检索流程跑通。说明见：[本地向量索引使用说明](30_References/local-vector-index-guide.md)。
+
 ## 笔记格式
 
 推荐每篇笔记包含 YAML front matter：
