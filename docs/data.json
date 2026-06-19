@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T01:08:12.757633+00:00",
+  "generatedAt": "2026-06-19T01:19:54.285519+00:00",
   "sections": [
     {
       "id": "inbox",
@@ -92,6 +92,18 @@
       "source": "",
       "excerpt": "References 文章、PDF、网页、书籍和课程的摘要放在这里。建议保留来源链接和自己的理解。",
       "body": "# References\n\n文章、PDF、网页、书籍和课程的摘要放在这里。建议保留来源链接和自己的理解。\n"
+    },
+    {
+      "id": "30_References--ai-corpus-and-vector-plan",
+      "title": "AI 语料与向量库建设计划",
+      "section": "references",
+      "sectionTitle": "References",
+      "path": "30_References/ai-corpus-and-vector-plan.md",
+      "tags": "",
+      "created": "",
+      "source": "",
+      "excerpt": "AI 语料与向量库建设计划 更新时间：20260619 当前选择 下一步先做语料层，不直接训练模型，也不直接绑定某个向量数据库。 当前产物： data/corpus.jsonl：文档级语料，一篇 Markdown 对应一行。 data/chunks.jsonl：检索级语料，按标题层级和长度切分。 data/manifest.json：生成时间、文档数量、切块",
+      "body": "# AI 语料与向量库建设计划\n\n> 更新时间：2026-06-19\n\n## 当前选择\n\n下一步先做语料层，不直接训练模型，也不直接绑定某个向量数据库。\n\n当前产物：\n\n- `data/corpus.jsonl`：文档级语料，一篇 Markdown 对应一行。\n- `data/chunks.jsonl`：检索级语料，按标题层级和长度切分。\n- `data/manifest.json`：生成时间、文档数量、切块数量。\n\n## 为什么先做 JSONL\n\nJSONL 的价值不是让模型“更认识 JSON”，而是让程序和 AI 都能稳定读取。\n\n每一行都是一个独立对象，适合：\n\n- 批量生成 embedding\n- 导入 Chroma / FAISS / LanceDB\n- 做关键词检索\n- 做 RAG 问答\n- 回溯来源文件\n\n## 字段解释\n\n| 字段 | 用途 |\n| --- | --- |\n| `id` | 稳定唯一编号，便于引用和更新 |\n| `documentId` | chunk 对应的原始文档 |\n| `type` | 区分 document / chunk |\n| `title` | 原始文档标题 |\n| `heading` | chunk 所在标题段落 |\n| `section` | 知识库分类 |\n| `path` | 来源文件路径 |\n| `tags` | 标签，后续可用于过滤 |\n| `content` | 真正送去 embedding 或检索的正文 |\n| `charCount` | 内容长度，便于排查切块质量 |\n\n## 为什么不先训练模型\n\n当前知识库更适合 RAG，不适合优先微调模型。\n\n原因：\n\n- 文档会持续变化，向量库更新更快。\n- 项目状态是事实型知识，RAG 更容易追溯来源。\n- 微调成本高，且更新一篇文档不能立刻反映到模型里。\n- 本地消费级设备更适合运行模型和向量检索，不适合从头训练。\n\n推荐路径：\n\n```text\nMarkdown 知识库\n→ corpus.jsonl\n→ chunks.jsonl\n→ embeddings\n→ 向量库\n→ RAG 问答\n```\n\n## 后续可选方案\n\n### 轻量本地版\n\n- 使用 `chunks.jsonl`\n- 调本地 embedding 模型\n- 存 FAISS 或 Chroma\n- 用本地 DeepSeek / Qwen / Llama 做回答\n\n### OpenAI API 版\n\n- 使用 `text-embedding-3-small` 或更新的 embedding 模型\n- 存 Chroma / LanceDB\n- 用 OpenAI 模型做问答和总结\n\n### 纯脚本检索版\n\n- 不生成向量\n- 只用关键词和 BM25\n- 成本最低，但语义搜索弱一些\n\n## 文件格式处理原则\n\n向量库最终处理的是文本。不同格式需要先抽取文本：\n\n| 格式 | 处理方式 |\n| --- | --- |\n| Markdown / txt | 直接读取 |\n| JSON / YAML | 提取字段后转文本 |\n| PDF | 提取文字；扫描件需要 OCR |\n| Word / docx | 用解析库抽取正文 |\n| Excel / CSV | 表格转文本或记录级 JSON |\n| PPTX | 按页面抽取标题和正文 |\n| 图片 | OCR 或视觉模型描述 |\n| 代码 | 按文件、函数、类切分 |\n\n当前第一版只处理 Markdown，因为知识库主体就是 Markdown。\n\n## 使用命令\n\n```bash\npython3 scripts/build-corpus.py\n```\n\n生成后可以用：\n\n```bash\nhead -n 1 data/chunks.jsonl\n```\n\n查看单条语料。\n"
     },
     {
       "id": "30_References--cetc-key-project-runbook",

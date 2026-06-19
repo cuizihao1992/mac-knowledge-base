@@ -44,6 +44,22 @@ python3 scripts/build-site.py
 
 脚本会重新生成 `docs/data.json`，网站会自动展示最新内容。推送到 `main` 后，GitHub Actions 会部署到 GitHub Pages。
 
+## AI 语料
+
+如果要让 AI、RAG 或向量数据库使用知识库内容，先生成 JSONL 语料：
+
+```bash
+python3 scripts/build-corpus.py
+```
+
+脚本会生成：
+
+- `data/corpus.jsonl`：文档级语料
+- `data/chunks.jsonl`：检索级切块
+- `data/manifest.json`：生成摘要
+
+后续可以把 `data/chunks.jsonl` 送入 embedding 模型，再导入 Chroma、FAISS 或 LanceDB。
+
 ## 笔记格式
 
 推荐每篇笔记包含 YAML front matter：
