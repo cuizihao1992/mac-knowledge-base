@@ -7,7 +7,7 @@
 知识库现在已经有第一版本地问答脚本：
 
 ```bash
-python3 scripts/ask-kb.py "jun-dd-web 为什么构建失败？下一步怎么修？"
+python3 scripts/ask-kb.py "某个项目为什么构建失败？下一步怎么修？"
 ```
 
 它会执行：
@@ -30,15 +30,15 @@ python3 scripts/ask-kb.py "jun-dd-web 为什么构建失败？下一步怎么修
 ## 示例
 
 ```bash
-python3 scripts/ask-kb.py "这个知识库有什么意义？"
+python3 scripts/ask-kb.py "知识库价值是什么？"
 ```
 
 ```bash
-python3 scripts/ask-kb.py "哪些项目构建失败？"
+python3 scripts/ask-kb.py "哪些项目目前没有跑通？"
 ```
 
 ```bash
-python3 scripts/ask-kb.py "jun-dd-web 下一步怎么修？"
+python3 scripts/ask-kb.py "某个项目下一步怎么修？"
 ```
 
 ## 输出结构

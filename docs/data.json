@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T07:21:14.434788+00:00",
+  "generatedAt": "2026-06-19T07:22:08.172995+00:00",
   "sections": [
     {
       "id": "inbox",
@@ -211,7 +211,7 @@
       "created": "",
       "source": "",
       "excerpt": "本地知识库问答使用说明 更新时间：20260619 当前能力 知识库现在已经有第一版本地问答脚本： 它会执行： 1. 从 data/vectorindex/ 检索相关片段。 2. 从片段中提取结论、行动项和来源。 3. 输出一个带依据路径的回答。 当前版本不调用外部 AI，不需要 API key。 它和 searchvector.py 的区别 | 脚本 | ",
-      "body": "# 本地知识库问答使用说明\n\n> 更新时间：2026-06-19\n\n## 当前能力\n\n知识库现在已经有第一版本地问答脚本：\n\n```bash\npython3 scripts/ask-kb.py \"jun-dd-web 为什么构建失败？下一步怎么修？\"\n```\n\n它会执行：\n\n1. 从 `data/vector-index/` 检索相关片段。\n2. 从片段中提取结论、行动项和来源。\n3. 输出一个带依据路径的回答。\n\n当前版本不调用外部 AI，不需要 API key。\n\n## 它和 search-vector.py 的区别\n\n| 脚本 | 用途 |\n| --- | --- |\n| `scripts/search-vector.py` | 返回相似片段列表 |\n| `scripts/ask-kb.py` | 基于相似片段整理成回答 |\n\n`search-vector.py` 更像搜索引擎，`ask-kb.py` 更像一个无模型版 RAG 问答助手。\n\n## 示例\n\n```bash\npython3 scripts/ask-kb.py \"这个知识库有什么意义？\"\n```\n\n```bash\npython3 scripts/ask-kb.py \"哪些项目构建失败？\"\n```\n\n```bash\npython3 scripts/ask-kb.py \"jun-dd-web 下一步怎么修？\"\n```\n\n## 输出结构\n\n回答包含：\n\n- `结论`\n- `下一步`\n- `依据片段`\n- `来源`\n\n这样做的重点是可追溯。即使没有大模型，也能知道回答来自哪篇文档。\n\n## 当前限制\n\n- 它不是大模型，不会做复杂推理。\n- 它主要做检索、摘取和排序。\n- 如果知识库没有记录，它不会自动知道答案。\n- 问题越接近文档里的关键词，效果越好。\n\n## 后续升级\n\n下一步可以把 `ask-kb.py` 的检索结果作为上下文，交给模型生成更自然的回答。\n\n可接入：\n\n- OpenAI API\n- DeepSeek API\n- Ollama 本地模型\n- LM Studio 本地模型\n- Qwen / DeepSeek / Llama 本地量化模型\n\n推荐顺序：\n\n1. 保留当前无模型版作为 fallback。\n2. 增加 `--provider openai` / `--provider ollama` 参数。\n3. 让模型只基于检索片段回答，并强制输出来源。\n"
+      "body": "# 本地知识库问答使用说明\n\n> 更新时间：2026-06-19\n\n## 当前能力\n\n知识库现在已经有第一版本地问答脚本：\n\n```bash\npython3 scripts/ask-kb.py \"某个项目为什么构建失败？下一步怎么修？\"\n```\n\n它会执行：\n\n1. 从 `data/vector-index/` 检索相关片段。\n2. 从片段中提取结论、行动项和来源。\n3. 输出一个带依据路径的回答。\n\n当前版本不调用外部 AI，不需要 API key。\n\n## 它和 search-vector.py 的区别\n\n| 脚本 | 用途 |\n| --- | --- |\n| `scripts/search-vector.py` | 返回相似片段列表 |\n| `scripts/ask-kb.py` | 基于相似片段整理成回答 |\n\n`search-vector.py` 更像搜索引擎，`ask-kb.py` 更像一个无模型版 RAG 问答助手。\n\n## 示例\n\n```bash\npython3 scripts/ask-kb.py \"知识库价值是什么？\"\n```\n\n```bash\npython3 scripts/ask-kb.py \"哪些项目目前没有跑通？\"\n```\n\n```bash\npython3 scripts/ask-kb.py \"某个项目下一步怎么修？\"\n```\n\n## 输出结构\n\n回答包含：\n\n- `结论`\n- `下一步`\n- `依据片段`\n- `来源`\n\n这样做的重点是可追溯。即使没有大模型，也能知道回答来自哪篇文档。\n\n## 当前限制\n\n- 它不是大模型，不会做复杂推理。\n- 它主要做检索、摘取和排序。\n- 如果知识库没有记录，它不会自动知道答案。\n- 问题越接近文档里的关键词，效果越好。\n\n## 后续升级\n\n下一步可以把 `ask-kb.py` 的检索结果作为上下文，交给模型生成更自然的回答。\n\n可接入：\n\n- OpenAI API\n- DeepSeek API\n- Ollama 本地模型\n- LM Studio 本地模型\n- Qwen / DeepSeek / Llama 本地量化模型\n\n推荐顺序：\n\n1. 保留当前无模型版作为 fallback。\n2. 增加 `--provider openai` / `--provider ollama` 参数。\n3. 让模型只基于检索片段回答，并强制输出来源。\n"
     },
     {
       "id": "30_References--local-vector-index-guide",
