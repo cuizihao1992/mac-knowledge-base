@@ -49,16 +49,16 @@ python3 scripts/build-vector-index.py
 ```json
 {
   "backend": "local-hashing",
-  "chunkCount": 183,
+  "chunkCount": 193,
   "dims": 768,
-  "vectorShape": [183, 768]
+  "vectorShape": [193, 768]
 }
 ```
 
 ## 搜索示例
 
 ```bash
-python3 scripts/search-vector.py "jun-dd-web 为什么构建失败"
+python3 scripts/search-vector.py "某个项目为什么构建失败"
 ```
 
 输出会包含：
@@ -72,19 +72,12 @@ python3 scripts/search-vector.py "jun-dd-web 为什么构建失败"
 也可以输出 JSON：
 
 ```bash
-python3 scripts/search-vector.py "jun-dd-web 为什么构建失败" --json
+python3 scripts/search-vector.py "某个项目为什么构建失败" --json
 ```
 
 ## 适合问什么
 
-适合：
-
-- `jun-dd-web 为什么构建失败`
-- `哪些项目可以构建成功`
-- `CETC 项目有什么风险`
-- `Maven 环境怎么配置`
-- `知识库有什么意义`
-- `敏感配置在哪里`
+适合问项目失败原因、环境配置、风险清单、知识库用途、敏感配置位置等问题。
 
 不适合：
 
