@@ -76,6 +76,16 @@ python3 scripts/search-vector.py "jun-dd-web 为什么构建失败"
 
 当前实现是零 API key 的本地哈希向量索引，适合先把 RAG 检索流程跑通。说明见：[本地向量索引使用说明](30_References/local-vector-index-guide.md)。
 
+## 本地知识库问答
+
+基于向量检索结果生成无模型版回答：
+
+```bash
+python3 scripts/ask-kb.py "jun-dd-web 为什么构建失败？下一步怎么修？"
+```
+
+当前版本不调用外部 AI，不需要 API key。它会返回结论、下一步、依据片段和来源路径。说明见：[本地知识库问答使用说明](30_References/local-kb-qa-guide.md)。
+
 ## 笔记格式
 
 推荐每篇笔记包含 YAML front matter：
