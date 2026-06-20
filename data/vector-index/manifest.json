@@ -1,8 +1,8 @@
 {
   "backend": "local-hashing",
-  "chunkCount": 221,
+  "chunkCount": 237,
   "dims": 768,
-  "generatedAt": "2026-06-20T09:53:02.326016+00:00",
+  "generatedAt": "2026-06-20T11:26:02.177390+00:00",
   "note": "This is a lightweight local index. Replace with embedding-model vectors when needed.",
   "outputs": [
     "data/vector-index/vectors.npy",
@@ -11,7 +11,7 @@
   ],
   "source": "data/chunks.jsonl",
   "vectorShape": [
-    221,
+    237,
     768
   ]
 }
