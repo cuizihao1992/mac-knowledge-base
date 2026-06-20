@@ -37,6 +37,25 @@ export DEEPSEEK_API_KEY=你的_key
 python3 scripts/ask-kb.py "jun-dd-web 为什么构建失败？下一步怎么修？" --provider deepseek
 ```
 
+也可以使用快捷入口。先复制配置模板：
+
+```bash
+cp .env.example .env
+```
+
+在 `.env` 中填写：
+
+```text
+DEEPSEEK_API_KEY=你的_key
+KB_PROVIDER=deepseek
+```
+
+之后直接提问：
+
+```bash
+./scripts/ask.sh "jun-dd-web 为什么构建失败？下一步怎么修？"
+```
+
 默认模型：
 
 ```text
@@ -61,6 +80,21 @@ python3 scripts/ask-kb.py "知识库整体目标是什么？" \
   --provider openai-compatible \
   --base-url https://你的模型服务地址 \
   --model 你的模型名
+```
+
+快捷入口需要在 `.env` 中填写：
+
+```text
+KB_PROVIDER=openai-compatible
+KB_API_KEY=你的_key
+KB_BASE_URL=https://你的模型服务地址
+KB_MODEL=你的模型名
+```
+
+然后运行：
+
+```bash
+./scripts/ask.sh "知识库整体目标是什么？"
 ```
 
 如果 key 放在别的环境变量里：
@@ -104,6 +138,12 @@ python3 scripts/ask-kb.py "CETC 项目风险有哪些？" \
 python3 scripts/ask-kb.py "知识库价值是什么？"
 ```
 
+快捷入口也可以临时指定无模型：
+
+```bash
+./scripts/ask.sh "知识库价值是什么？" none
+```
+
 这个模式不需要 API key，适合离线查看、排查检索结果、或者模型服务不可用时兜底。
 
 ## 参数说明
@@ -120,9 +160,33 @@ python3 scripts/ask-kb.py "知识库价值是什么？"
 | `--top-k` | 控制送给模型的知识库片段数量 |
 | `--temperature` | 控制回答发散程度，默认 0.2 |
 
+## 快捷入口
+
+`scripts/ask.sh` 会自动读取仓库根目录的 `.env`。
+
+推荐配置：
+
+```text
+DEEPSEEK_API_KEY=你的_key
+KB_PROVIDER=deepseek
+```
+
+常用命令：
+
+```bash
+./scripts/ask.sh "我的知识库整体目标是什么？下一步应该做什么？"
+```
+
+临时切换 provider：
+
+```bash
+./scripts/ask.sh "哪些 CETC 项目构建失败？" none
+```
+
 ## 注意事项
 
 - 不要把 API key 写进 Markdown、脚本或 Git 提交。
+- `.env` 已加入 `.gitignore`，真实 key 放在 `.env`，模板放在 `.env.example`。
 - 如果问题涉及敏感项目资料，先确认能否发送到云端模型。
 - 模型只会看到检索出来的片段，不会自动读取整个电脑。
 - 回答里如果说“信息不足”，通常说明知识库文档还需要补充。
