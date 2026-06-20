@@ -86,6 +86,25 @@ python3 scripts/ask-kb.py "jun-dd-web 为什么构建失败？下一步怎么修
 
 当前版本不调用外部 AI，不需要 API key。它会返回结论、下一步、依据片段和来源路径。说明见：[本地知识库问答使用说明](30_References/local-kb-qa-guide.md)。
 
+也可以使用云端模型生成更自然的回答。8GB Mac 推荐这种方式，因为本机只负责检索，不负责运行大模型：
+
+```bash
+export DEEPSEEK_API_KEY=你的_key
+python3 scripts/ask-kb.py "jun-dd-web 为什么构建失败？下一步怎么修？" --provider deepseek
+```
+
+通用 OpenAI-compatible API：
+
+```bash
+export KB_API_KEY=你的_key
+python3 scripts/ask-kb.py "知识库现在能做什么？" \
+  --provider openai-compatible \
+  --base-url https://你的模型服务地址 \
+  --model 你的模型名
+```
+
+说明见：[云端模型知识库问答使用说明](30_References/cloud-model-kb-qa-guide.md)。
+
 ## 笔记格式
 
 推荐每篇笔记包含 YAML front matter：

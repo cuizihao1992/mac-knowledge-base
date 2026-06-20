@@ -1,7 +1,7 @@
 {
-  "chunkCount": 200,
-  "documentCount": 18,
-  "generatedAt": "2026-06-19T07:22:08.228126+00:00",
+  "chunkCount": 209,
+  "documentCount": 19,
+  "generatedAt": "2026-06-20T01:54:20.357693+00:00",
   "outputs": [
     "data/corpus.jsonl",
     "data/chunks.jsonl"
