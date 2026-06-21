@@ -1,52 +1,7 @@
 {
-  "generatedAt": "2026-06-21T15:59:19.965140+00:00",
+  "generatedAt": "2026-06-21T16:04:02.924238+00:00",
   "includeActions": [
     "摘要后可删"
   ],
-  "commands": [
-    {
-      "project": "cetc-ui/compass-ui-demo",
-      "action": "摘要后可删",
-      "businessValue": "低到中，需按目录确认",
-      "source": "/Users/cuizihao/CETC/Project/cetc-ui/compass-ui-demo",
-      "targetDir": "/Users/cuizihao/CETC/Archive/delete-after-review",
-      "target": "/Users/cuizihao/CETC/Archive/delete-after-review/compass-ui-demo",
-      "mkdirCommand": "mkdir -p /Users/cuizihao/CETC/Archive/delete-after-review",
-      "moveCommand": "mv /Users/cuizihao/CETC/Project/cetc-ui/compass-ui-demo /Users/cuizihao/CETC/Archive/delete-after-review/",
-      "status": "planned"
-    },
-    {
-      "project": "gis/offline-map",
-      "action": "摘要后可删",
-      "businessValue": "GIS / BI / 地图资产",
-      "source": "/Users/cuizihao/CETC/Project/gis/offline-map",
-      "targetDir": "/Users/cuizihao/CETC/Archive/delete-after-review",
-      "target": "/Users/cuizihao/CETC/Archive/delete-after-review/offline-map",
-      "mkdirCommand": "mkdir -p /Users/cuizihao/CETC/Archive/delete-after-review",
-      "moveCommand": "mv /Users/cuizihao/CETC/Project/gis/offline-map /Users/cuizihao/CETC/Archive/delete-after-review/",
-      "status": "planned"
-    },
-    {
-      "project": "industry-chain",
-      "action": "摘要后可删",
-      "businessValue": "低到中，需按目录确认",
-      "source": "/Users/cuizihao/CETC/Project/industry-chain",
-      "targetDir": "/Users/cuizihao/CETC/Archive/delete-after-review",
-      "target": "/Users/cuizihao/CETC/Archive/delete-after-review/industry-chain",
-      "mkdirCommand": "mkdir -p /Users/cuizihao/CETC/Archive/delete-after-review",
-      "moveCommand": "mv /Users/cuizihao/CETC/Project/industry-chain /Users/cuizihao/CETC/Archive/delete-after-review/",
-      "status": "planned"
-    },
-    {
-      "project": "smartCity/managerweb",
-      "action": "摘要后可删",
-      "businessValue": "智慧城市业务",
-      "source": "/Users/cuizihao/CETC/Project/smartCity/managerweb",
-      "targetDir": "/Users/cuizihao/CETC/Archive/delete-after-review",
-      "target": "/Users/cuizihao/CETC/Archive/delete-after-review/managerweb",
-      "mkdirCommand": "mkdir -p /Users/cuizihao/CETC/Archive/delete-after-review",
-      "moveCommand": "mv /Users/cuizihao/CETC/Project/smartCity/managerweb /Users/cuizihao/CETC/Archive/delete-after-review/",
-      "status": "planned"
-    }
-  ]
+  "commands": []
 }
