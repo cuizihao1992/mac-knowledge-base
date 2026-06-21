@@ -175,6 +175,11 @@ function renderDashboard() {
 
   const links = [
     {
+      title: "CETC 清理执行计划",
+      path: "30_References/cetc-cleanup-execution-plan.md",
+      desc: "把项目拆成可删、归档、脱敏、保留四个执行批次。",
+    },
+    {
       title: "CETC 自动资产抽取报告",
       path: "30_References/cetc-asset-extraction-report.md",
       desc: "删除前项目快照，包含页面/API/后端/配置线索。",
