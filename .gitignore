@@ -10,3 +10,5 @@ outputs/*
 !outputs/cetc-asset-extraction.md
 !outputs/cetc-cleanup-commands.json
 !outputs/cetc-cleanup-commands.md
+!outputs/cetc-deep-asset-extraction.json
+!outputs/cetc-deep-asset-extraction.md
