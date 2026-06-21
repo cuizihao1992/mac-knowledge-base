@@ -175,6 +175,11 @@ function renderDashboard() {
 
   const links = [
     {
+      title: "CETC 自动资产抽取报告",
+      path: "30_References/cetc-asset-extraction-report.md",
+      desc: "删除前项目快照，包含页面/API/后端/配置线索。",
+    },
+    {
       title: "CETC 删除前资产抽取清单",
       path: "30_References/cetc-delete-prep-asset-extraction.md",
       desc: "决定哪些项目可删、归档或先脱敏。",
