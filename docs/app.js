@@ -2,6 +2,7 @@ const state = {
   data: null,
   section: "all",
   query: "",
+  askQuery: "",
   activeId: null,
 };
 
@@ -9,11 +10,23 @@ const els = {
   overviewCards: document.querySelector("#overviewCards"),
   quickLinks: document.querySelector("#quickLinks"),
   search: document.querySelector("#search"),
+  askForm: document.querySelector("#askForm"),
+  askInput: document.querySelector("#askInput"),
+  askSuggestions: document.querySelector("#askSuggestions"),
+  answerPanel: document.querySelector("#answerPanel"),
   sections: document.querySelector("#sections"),
   stats: document.querySelector("#stats"),
   notes: document.querySelector("#notes"),
   reader: document.querySelector("#reader"),
 };
+
+const suggestedQuestions = [
+  "jun-dd-web 有哪些可复用资产？",
+  "哪些 CETC 项目可以归档？",
+  "信访项目的技术结构是什么？",
+  "哪些项目有敏感配置风险？",
+  "这个知识库如何给 AI 使用？",
+];
 
 function escapeHtml(value) {
   return String(value)
@@ -141,6 +154,118 @@ function noteByPath(path) {
   return state.data.notes.find((note) => note.path === path);
 }
 
+function tokenize(text) {
+  const normalized = String(text)
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+  const words = normalized.split(/\s+/).filter((word) => word.length >= 2);
+  const cjk = [...String(text).matchAll(/[\u4e00-\u9fa5]{2,}/g)]
+    .flatMap((match) => {
+      const value = match[0];
+      const grams = [];
+      for (let index = 0; index < value.length - 1; index += 1) {
+        grams.push(value.slice(index, index + 2));
+      }
+      return grams;
+    });
+  return [...new Set([...words, ...cjk])];
+}
+
+function splitBodyIntoBlocks(note) {
+  return note.body
+    .split(/\n{2,}/)
+    .map((block) => block.replace(/\s+/g, " ").trim())
+    .filter((block) => block && !/^---$/.test(block) && block.length > 18)
+    .slice(0, 180)
+    .map((block) => ({ note, block }));
+}
+
+function scoreBlock(block, queryTokens, rawQuery) {
+  const haystack = `${block.note.title} ${block.note.path} ${block.note.tags} ${block.block}`.toLowerCase();
+  const score = queryTokens.reduce((sum, token) => {
+    if (!haystack.includes(token)) return sum;
+    if (block.note.title.toLowerCase().includes(token)) return sum + 7;
+    if (block.note.path.toLowerCase().includes(token)) return sum + 5;
+    return sum + 2;
+  }, 0);
+  return haystack.includes(rawQuery.toLowerCase()) ? score + 10 : score;
+}
+
+function findAnswerSources(query) {
+  const queryTokens = tokenize(query);
+  if (!queryTokens.length) return [];
+  return state.data.notes
+    .flatMap(splitBodyIntoBlocks)
+    .map((block) => ({ ...block, score: scoreBlock(block, queryTokens, query) }))
+    .filter((block) => block.score > 0)
+    .sort((left, right) => right.score - left.score)
+    .slice(0, 8);
+}
+
+function conciseBlock(block) {
+  return block
+    .replace(/^#+\s+/g, "")
+    .replace(/^[-*]\s+/g, "")
+    .replace(/\|/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 260);
+}
+
+function renderAskSuggestions() {
+  els.askSuggestions.innerHTML = suggestedQuestions
+    .map(
+      (question) => `
+        <button type="button" data-question="${escapeHtml(question)}">${escapeHtml(question)}</button>
+      `,
+    )
+    .join("");
+}
+
+function renderAnswer(query) {
+  const sources = findAnswerSources(query);
+  if (!sources.length) {
+    els.answerPanel.innerHTML = `
+      <div class="answer-empty">
+        <h3>没找到足够相关的内容</h3>
+        <p>可以换一个关键词，或先在上方搜索框里搜项目名、文档名。</p>
+      </div>
+    `;
+    return;
+  }
+
+  const topSources = sources.slice(0, 4);
+  const bullets = topSources
+    .map((source) => `<li>${escapeHtml(conciseBlock(source.block))}</li>`)
+    .join("");
+  const sourceLinks = sources
+    .map(
+      (source) => `
+        <button type="button" class="source-card" data-path="${escapeHtml(source.note.path)}">
+          <span>${escapeHtml(source.note.title)}</span>
+          <small>${escapeHtml(source.note.path)}</small>
+        </button>
+      `,
+    )
+    .join("");
+
+  els.answerPanel.innerHTML = `
+    <article class="answer-card">
+      <div class="answer-title">
+        <p class="panel-kicker">Local Answer</p>
+        <h3>${escapeHtml(query)}</h3>
+      </div>
+      <p class="answer-note">这是基于当前静态知识库的检索式回答，适合快速定位；需要自然语言总结时，可以把这些来源交给 DeepSeek。</p>
+      <ul class="answer-points">${bullets}</ul>
+      <div class="answer-sources">
+        <h4>来源</h4>
+        <div>${sourceLinks}</div>
+      </div>
+    </article>
+  `;
+}
+
 function openNoteByPath(path) {
   const note = noteByPath(path);
   if (note) {
@@ -188,6 +313,11 @@ function renderDashboard() {
       title: "CETC 自动资产抽取报告",
       path: "30_References/cetc-asset-extraction-report.md",
       desc: "删除前项目快照，包含页面/API/后端/配置线索。",
+    },
+    {
+      title: "CETC 高价值项目深度资产报告",
+      path: "30_References/cetc-high-value-project-deep-assets.md",
+      desc: "深挖页面、路由、组件、接口、GIS 线索和配置风险。",
     },
     {
       title: "CETC 删除前资产抽取清单",
@@ -308,6 +438,29 @@ function bindEvents() {
     renderNotes();
   });
 
+  els.askForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const query = els.askInput.value.trim();
+    if (!query) return;
+    state.askQuery = query;
+    renderAnswer(query);
+  });
+
+  els.askSuggestions.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-question]");
+    if (!button) return;
+    els.askInput.value = button.dataset.question;
+    state.askQuery = button.dataset.question;
+    renderAnswer(button.dataset.question);
+  });
+
+  els.answerPanel.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-path]");
+    if (!button) return;
+    openNoteByPath(button.dataset.path);
+    document.querySelector(".workspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
   els.sections.addEventListener("click", (event) => {
     const button = event.target.closest("[data-section]");
     if (!button) return;
@@ -340,6 +493,7 @@ fetch("./data.json")
   .then((data) => {
     state.data = data;
     renderDashboard();
+    renderAskSuggestions();
     renderSections();
     renderNotes();
     bindEvents();

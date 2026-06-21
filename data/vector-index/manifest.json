@@ -2,7 +2,7 @@
   "backend": "local-hashing",
   "chunkCount": 329,
   "dims": 768,
-  "generatedAt": "2026-06-21T16:15:22.706305+00:00",
+  "generatedAt": "2026-06-21T16:33:43.737762+00:00",
   "note": "This is a lightweight local index. Replace with embedding-model vectors when needed.",
   "outputs": [
     "data/vector-index/vectors.npy",

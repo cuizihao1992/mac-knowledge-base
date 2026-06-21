@@ -95,6 +95,30 @@
         <nav id="sections" class="sections"></nav>
       </section>
 
+      <section class="ask-workbench" aria-label="问知识库">
+        <div class="ask-heading">
+          <div>
+            <p class="panel-kicker">Ask</p>
+            <h2>问知识库</h2>
+          </div>
+          <p>输入问题后，网页会从当前知识库里找相关段落，并附上来源。</p>
+        </div>
+        <form class="ask-box" id="askForm">
+          <label for="askInput">问题</label>
+          <div class="ask-row">
+            <input id="askInput" type="search" placeholder="例如：jun-dd-web 有哪些可复用资产？" autocomplete="off" />
+            <button type="submit">提问</button>
+          </div>
+        </form>
+        <div class="ask-suggestions" id="askSuggestions" aria-label="推荐问题"></div>
+        <div class="answer-panel" id="answerPanel">
+          <div class="reader-empty">
+            <h2>先问一个问题</h2>
+            <p>适合问项目价值、归档建议、技术结构、敏感配置风险和 AI 使用方式。</p>
+          </div>
+        </div>
+      </section>
+
       <section class="workspace">
         <aside class="note-panel" id="notePanel">
           <div class="panel-heading">
