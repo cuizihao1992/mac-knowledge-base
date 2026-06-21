@@ -79,9 +79,15 @@ def main() -> None:
             )
 
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    corpus_manifest_path = ROOT / "data" / "manifest.json"
+    vector_manifest_path = ROOT / "data" / "vector-index" / "manifest.json"
+    corpus_manifest = json.loads(corpus_manifest_path.read_text(encoding="utf-8")) if corpus_manifest_path.exists() else None
+    vector_manifest = json.loads(vector_manifest_path.read_text(encoding="utf-8")) if vector_manifest_path.exists() else None
     data = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "sections": SECTIONS,
+        "corpusManifest": corpus_manifest,
+        "vectorManifest": vector_manifest,
         "notes": notes,
     }
     (DOCS_DIR / "data.json").write_text(

@@ -18,8 +18,8 @@
 
       <section class="hero">
         <p class="eyebrow">Personal Markdown Library</p>
-        <h1>知识、项目和代码线索的本地索引</h1>
-        <p class="hero-copy">用搜索、分类和清晰的阅读视图快速找到 Mac 上沉淀的内容。</p>
+        <h1>个人工程知识库控制台</h1>
+        <p class="hero-copy">把 Mac 上的项目资产、删除决策、AI 问答和长期笔记放到一个可搜索、可追溯的入口。</p>
         <div class="hero-search">
           <label for="search">搜索知识库</label>
           <input id="search" type="search" placeholder="输入关键词、标签或路径" autocomplete="off" />
@@ -28,6 +28,69 @@
     </header>
 
     <main>
+      <section class="dashboard" aria-label="知识库控制台">
+        <div class="overview-grid" id="overviewCards"></div>
+
+        <div class="dashboard-grid">
+          <section class="dashboard-panel quick-links-panel">
+            <div class="dashboard-heading">
+              <p class="panel-kicker">Start Here</p>
+              <h2>核心入口</h2>
+            </div>
+            <div class="quick-links" id="quickLinks"></div>
+          </section>
+
+          <section class="dashboard-panel cleanup-panel">
+            <div class="dashboard-heading">
+              <p class="panel-kicker">Cleanup</p>
+              <h2>CETC 清理决策</h2>
+            </div>
+            <div class="decision-columns">
+              <div>
+                <h3>第一批可清理</h3>
+                <ul>
+                  <li><code>cetc-ui/compass-ui-demo</code></li>
+                  <li><code>smartCity/managerweb</code></li>
+                  <li><code>industry-chain</code></li>
+                  <li><code>gis/offline-map</code></li>
+                </ul>
+              </div>
+              <div>
+                <h3>先不要直接删</h3>
+                <ul>
+                  <li><code>cgpt2.0/</code></li>
+                  <li><code>xinfang/</code></li>
+                  <li><code>jun-dd-web</code></li>
+                  <li><code>cetc-ui/bi-ui</code></li>
+                  <li><code>gis/gis-map-sdk*</code></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="dashboard-panel ai-panel">
+            <div class="dashboard-heading">
+              <p class="panel-kicker">AI Ready</p>
+              <h2>AI 使用入口</h2>
+            </div>
+            <pre><code>./scripts/ask.sh "我的知识库整体目标是什么？"</code></pre>
+            <p>支持 DeepSeek、OpenAI、OpenAI-compatible API，也保留无模型检索兜底。</p>
+          </section>
+
+          <section class="dashboard-panel next-panel">
+            <div class="dashboard-heading">
+              <p class="panel-kicker">Next</p>
+              <h2>下一步行动</h2>
+            </div>
+            <ol>
+              <li>生成机器可读的 CETC 资产抽取文件。</li>
+              <li>先清理第一批低价值项目。</li>
+              <li>对高价值 GIS / BI / 信访项目继续抽取页面和接口。</li>
+            </ol>
+          </section>
+        </div>
+      </section>
+
       <section class="section-strip" aria-label="知识库分类">
         <nav id="sections" class="sections"></nav>
       </section>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-20T11:25:53.707236+00:00",
+  "generatedAt": "2026-06-21T06:56:36.159577+00:00",
   "sections": [
     {
       "id": "inbox",
@@ -44,6 +44,32 @@
       "description": "常用模板"
     }
   ],
+  "corpusManifest": {
+    "chunkCount": 237,
+    "documentCount": 21,
+    "generatedAt": "2026-06-20T11:25:53.671209+00:00",
+    "outputs": [
+      "data/corpus.jsonl",
+      "data/chunks.jsonl"
+    ]
+  },
+  "vectorManifest": {
+    "backend": "local-hashing",
+    "chunkCount": 237,
+    "dims": 768,
+    "generatedAt": "2026-06-20T11:26:02.177390+00:00",
+    "note": "This is a lightweight local index. Replace with embedding-model vectors when needed.",
+    "outputs": [
+      "data/vector-index/vectors.npy",
+      "data/vector-index/chunks.jsonl",
+      "data/vector-index/manifest.json"
+    ],
+    "source": "data/chunks.jsonl",
+    "vectorShape": [
+      237,
+      768
+    ]
+  },
   "notes": [
     {
       "id": "10_Notes--README",

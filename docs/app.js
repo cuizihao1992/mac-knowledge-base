@@ -6,6 +6,8 @@ const state = {
 };
 
 const els = {
+  overviewCards: document.querySelector("#overviewCards"),
+  quickLinks: document.querySelector("#quickLinks"),
   search: document.querySelector("#search"),
   sections: document.querySelector("#sections"),
   stats: document.querySelector("#stats"),
@@ -135,6 +137,78 @@ function filteredNotes() {
   });
 }
 
+function noteByPath(path) {
+  return state.data.notes.find((note) => note.path === path);
+}
+
+function openNoteByPath(path) {
+  const note = noteByPath(path);
+  if (note) {
+    renderReader(note);
+  }
+}
+
+function renderDashboard() {
+  const referenceCount = state.data.notes.filter((note) => note.section === "references").length;
+  const cetcCount = state.data.notes.filter((note) => /cetc/i.test(`${note.title} ${note.path} ${note.tags}`)).length;
+  const chunkCount = state.data.corpusManifest?.chunkCount || state.data.vectorManifest?.chunkCount || "—";
+  const vectorBackend = state.data.vectorManifest?.backend || "local";
+
+  const cards = [
+    { label: "文档总数", value: state.data.notes.length, detail: "Markdown 已同步到网站" },
+    { label: "References", value: referenceCount, detail: "项目盘点、AI、清理计划" },
+    { label: "CETC 文档", value: cetcCount, detail: "旧项目价值和删除决策" },
+    { label: "AI 切块", value: chunkCount, detail: `${vectorBackend} 向量索引` },
+  ];
+
+  els.overviewCards.innerHTML = cards
+    .map(
+      (card) => `
+        <div class="overview-card">
+          <span>${escapeHtml(card.label)}</span>
+          <strong>${escapeHtml(card.value)}</strong>
+          <p>${escapeHtml(card.detail)}</p>
+        </div>
+      `,
+    )
+    .join("");
+
+  const links = [
+    {
+      title: "CETC 删除前资产抽取清单",
+      path: "30_References/cetc-delete-prep-asset-extraction.md",
+      desc: "决定哪些项目可删、归档或先脱敏。",
+    },
+    {
+      title: "CETC 旧项目业务价值与架构判断",
+      path: "30_References/cetc-project-business-value-and-architecture.md",
+      desc: "按业务价值和架构组判断保留意义。",
+    },
+    {
+      title: "云端模型知识库问答使用说明",
+      path: "30_References/cloud-model-kb-qa-guide.md",
+      desc: "用 DeepSeek / OpenAI 读取本地知识库。",
+    },
+    {
+      title: "cuizihao 目录代码项目盘点",
+      path: "30_References/mac-code-projects-inventory.md",
+      desc: "查看 Mac 上主要代码项目分布。",
+    },
+  ];
+
+  els.quickLinks.innerHTML = links
+    .map((link) => {
+      const note = noteByPath(link.path);
+      return `
+        <button class="quick-link" type="button" data-path="${escapeHtml(link.path)}" ${note ? "" : "disabled"}>
+          <span>${escapeHtml(link.title)}</span>
+          <small>${escapeHtml(link.desc)}</small>
+        </button>
+      `;
+    })
+    .join("");
+}
+
 function renderSections() {
   const counts = new Map();
   state.data.notes.forEach((note) => counts.set(note.section, (counts.get(note.section) || 0) + 1));
@@ -227,6 +301,12 @@ function bindEvents() {
     renderNotes();
   });
 
+  els.quickLinks.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-path]");
+    if (!button) return;
+    openNoteByPath(button.dataset.path);
+  });
+
   els.notes.addEventListener("click", (event) => {
     const button = event.target.closest("[data-id]");
     if (!button) return;
@@ -244,6 +324,7 @@ fetch("./data.json")
   .then((response) => response.json())
   .then((data) => {
     state.data = data;
+    renderDashboard();
     renderSections();
     renderNotes();
     bindEvents();
