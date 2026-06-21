@@ -175,6 +175,11 @@ function renderDashboard() {
 
   const links = [
     {
+      title: "CETC 清理命令计划",
+      path: "30_References/cetc-cleanup-command-plan.md",
+      desc: "第一批移动归档 dry-run 命令，只生成不执行。",
+    },
+    {
       title: "CETC 清理执行计划",
       path: "30_References/cetc-cleanup-execution-plan.md",
       desc: "把项目拆成可删、归档、脱敏、保留四个执行批次。",

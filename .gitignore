@@ -8,3 +8,5 @@ work/
 outputs/*
 !outputs/cetc-asset-extraction.json
 !outputs/cetc-asset-extraction.md
+!outputs/cetc-cleanup-commands.json
+!outputs/cetc-cleanup-commands.md
