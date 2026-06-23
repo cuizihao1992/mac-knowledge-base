@@ -1,14 +1,14 @@
 ---
 title: CETC 自动资产抽取报告
 tags: [reference, code, cetc, archive, generated]
-created: 2026-06-22
+created: 2026-06-23
 source: /Users/cuizihao/CETC/Project
 related: [CETC 删除前资产抽取清单, CETC 旧项目业务价值与架构判断]
 ---
 
 # CETC 自动资产抽取报告
 
-> 生成时间：2026-06-21T16:03:28.655963+00:00
+> 生成时间：2026-06-23T03:49:25.361681+00:00
 
 ## 总览
 

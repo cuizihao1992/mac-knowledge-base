@@ -39,17 +39,17 @@
 本仓库包含一个位于 `docs/` 的静态知识库网站。更新 Markdown 内容后，运行：
 
 ```bash
-python3 scripts/build-site.py
+./scripts/update-all.sh
 ```
 
-脚本会重新生成 `docs/data.json`，网站会自动展示最新内容。推送到 `main` 后，GitHub Actions 会部署到 GitHub Pages。
+脚本会重新扫描项目、生成报告、重建 `docs/data.json`、AI 语料和本地向量索引。推送到 `main` 后，GitHub Pages 会展示最新内容。
 
 ## AI 语料
 
 如果要让 AI、RAG 或向量数据库使用知识库内容，先生成 JSONL 语料：
 
 ```bash
-python3 scripts/build-corpus.py
+./scripts/update-all.sh
 ```
 
 脚本会生成：

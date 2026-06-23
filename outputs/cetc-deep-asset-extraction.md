@@ -1,14 +1,14 @@
 ---
 title: CETC 高价值项目深度资产报告
 tags: [reference, code, cetc, deep-extraction, generated]
-created: 2026-06-22
+created: 2026-06-23
 source: /Users/cuizihao/CETC/Project
 related: [CETC 自动资产抽取报告, CETC 旧项目业务价值与架构判断]
 ---
 
 # CETC 高价值项目深度资产报告
 
-> 生成时间：2026-06-21T16:15:11.847693+00:00
+> 生成时间：2026-06-23T03:49:38.715990+00:00
 
 ## 总览
 

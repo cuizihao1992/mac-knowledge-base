@@ -1,14 +1,14 @@
 ---
 title: CETC 清理命令计划
 tags: [reference, code, cetc, cleanup, generated]
-created: 2026-06-22
+created: 2026-06-23
 source: /Users/cuizihao/CETC/Project
 related: [CETC 清理执行计划, CETC 自动资产抽取报告]
 ---
 
 # CETC 清理命令计划
 
-> 生成时间：2026-06-21T16:04:02.924238+00:00
+> 生成时间：2026-06-23T03:49:45.107268+00:00
 
 ## 说明
 
