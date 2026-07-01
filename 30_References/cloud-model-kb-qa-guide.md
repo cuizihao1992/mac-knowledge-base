@@ -164,7 +164,13 @@ python3 scripts/ask-kb.py "知识库价值是什么？"
 
 `scripts/ask.sh` 会自动读取仓库根目录的 `.env`。
 
-推荐配置：
+如果不配置 `.env`，默认使用无模型版本地检索，不需要 API key：
+
+```bash
+./scripts/ask.sh "知识库价值是什么？"
+```
+
+如果要使用 DeepSeek，推荐配置：
 
 ```text
 DEEPSEEK_API_KEY=你的_key

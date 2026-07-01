@@ -19,7 +19,7 @@ if [ -z "$QUERY" ]; then
 fi
 
 shift || true
-PROVIDER="${KB_PROVIDER:-deepseek}"
+PROVIDER="${KB_PROVIDER:-none}"
 if [ "$#" -gt 0 ]; then
   case "$1" in
     none|deepseek|openai|openai-compatible)
