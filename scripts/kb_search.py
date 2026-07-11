@@ -4,9 +4,26 @@ import json
 import re
 from pathlib import Path
 
-import numpy as np
+try:
+    import numpy as np
+except ModuleNotFoundError:
+    np = None
 
-from vector_utils import embed, token_set
+try:
+    from vector_utils import embed, token_set
+except ModuleNotFoundError:
+    embed = None
+
+    def token_set(text: str) -> set[str]:
+        ascii_terms = re.findall(r"[A-Za-z0-9_./:-]+", text.lower())
+        cjk_terms = re.findall(r"[\u4e00-\u9fff]{1,4}", text)
+        cjk_bigrams: list[str] = []
+        for term in cjk_terms:
+            if len(term) == 1:
+                cjk_bigrams.append(term)
+            else:
+                cjk_bigrams.extend(term[index : index + 2] for index in range(len(term) - 1))
+        return set(ascii_terms + cjk_bigrams)
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_INDEX = ROOT / "data" / "vector-index"
@@ -28,12 +45,17 @@ def search(
     vector_weight: float = 0.65,
 ) -> list[dict[str, object]]:
     manifest = json.loads((index / "manifest.json").read_text(encoding="utf-8"))
-    vectors = np.load(index / "vectors.npy")
     chunks = load_jsonl(index / "chunks.jsonl")
-    query_vector = embed(query, int(manifest["dims"]))
-    vector_scores = vectors @ query_vector
     query_terms = token_set(query)
     query_ascii_terms = {term for term in query_terms if re.search(r"[A-Za-z0-9]", term)}
+    has_vector_backend = np is not None and embed is not None and (index / "vectors.npy").exists()
+
+    if has_vector_backend:
+        vectors = np.load(index / "vectors.npy")
+        query_vector = embed(query, int(manifest["dims"]))
+        vector_scores = vectors @ query_vector
+    else:
+        vector_scores = [0.0] * len(chunks)
 
     lexical_scores = []
     penalties = []
@@ -49,10 +71,19 @@ def search(
         missing_ascii_terms = query_ascii_terms - chunk_terms
         penalties.append(0.45 if missing_ascii_terms else 1.0)
 
-    lexical_scores_array = np.array(lexical_scores, dtype=np.float32)
-    penalties_array = np.array(penalties, dtype=np.float32)
-    scores = (vector_weight * vector_scores + (1.0 - vector_weight) * lexical_scores_array) * penalties_array
-    order = np.argsort(-scores)[:top_k]
+    if np is not None:
+        lexical_scores_array = np.array(lexical_scores, dtype=np.float32)
+        penalties_array = np.array(penalties, dtype=np.float32)
+        scores = (vector_weight * vector_scores + (1.0 - vector_weight) * lexical_scores_array) * penalties_array
+        order = np.argsort(-scores)[:top_k]
+    else:
+        lexical_scores_array = lexical_scores
+        penalties_array = penalties
+        scores = [score * penalty for score, penalty in zip(lexical_scores, penalties)]
+        order = sorted(range(len(scores)), key=lambda index: scores[index], reverse=True)[:top_k]
+
+    if not scores or max(float(score) for score in scores) <= 0:
+        return []
 
     results = []
     for rank, row_index in enumerate(order, 1):
@@ -64,6 +95,7 @@ def search(
                 "vectorScore": float(vector_scores[int(row_index)]),
                 "lexicalScore": float(lexical_scores_array[int(row_index)]),
                 "penalty": float(penalties_array[int(row_index)]),
+                "backend": "local-hashing" if has_vector_backend else "lexical-fallback",
                 "title": chunk.get("title"),
                 "heading": chunk.get("heading"),
                 "path": chunk.get("path"),
