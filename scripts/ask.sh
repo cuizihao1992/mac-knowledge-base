@@ -3,6 +3,11 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ENV_FILE="$ROOT_DIR/.env"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+
+if [ -x "$ROOT_DIR/.venv/bin/python" ]; then
+  PYTHON_BIN="$ROOT_DIR/.venv/bin/python"
+fi
 
 if [ -f "$ENV_FILE" ]; then
   set -a
@@ -31,20 +36,20 @@ fi
 
 case "$PROVIDER" in
   none)
-    exec python3 "$ROOT_DIR/scripts/ask-kb.py" "$QUERY" --provider none "$@"
+    exec "$PYTHON_BIN" "$ROOT_DIR/scripts/ask-kb.py" "$QUERY" --provider none "$@"
     ;;
   deepseek)
-    exec python3 "$ROOT_DIR/scripts/ask-kb.py" "$QUERY" --provider deepseek "$@"
+    exec "$PYTHON_BIN" "$ROOT_DIR/scripts/ask-kb.py" "$QUERY" --provider deepseek "$@"
     ;;
   openai)
-    exec python3 "$ROOT_DIR/scripts/ask-kb.py" "$QUERY" --provider openai "$@"
+    exec "$PYTHON_BIN" "$ROOT_DIR/scripts/ask-kb.py" "$QUERY" --provider openai "$@"
     ;;
   openai-compatible)
     if [ -z "${KB_BASE_URL:-}" ] || [ -z "${KB_MODEL:-}" ]; then
       echo "openai-compatible requires KB_BASE_URL and KB_MODEL in .env" >&2
       exit 1
     fi
-    exec python3 "$ROOT_DIR/scripts/ask-kb.py" "$QUERY" \
+    exec "$PYTHON_BIN" "$ROOT_DIR/scripts/ask-kb.py" "$QUERY" \
       --provider openai-compatible \
       --base-url "$KB_BASE_URL" \
       --model "$KB_MODEL" \

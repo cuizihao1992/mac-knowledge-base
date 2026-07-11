@@ -27,6 +27,7 @@ except ModuleNotFoundError:
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_INDEX = ROOT / "data" / "vector-index"
+MIN_SCORE = 0.05
 
 
 def load_jsonl(path: Path) -> list[dict[str, object]]:
@@ -82,7 +83,7 @@ def search(
         scores = [score * penalty for score, penalty in zip(lexical_scores, penalties)]
         order = sorted(range(len(scores)), key=lambda index: scores[index], reverse=True)[:top_k]
 
-    if not scores or max(float(score) for score in scores) <= 0:
+    if len(scores) == 0 or max(float(score) for score in scores) < MIN_SCORE:
         return []
 
     results = []
