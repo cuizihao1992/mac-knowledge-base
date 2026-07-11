@@ -105,6 +105,8 @@ python3 scripts/ask-kb.py "知识库现在能做什么？" \
 
 说明见：[云端模型知识库问答使用说明](30_References/cloud-model-kb-qa-guide.md)。
 
+常用命令模板见：[知识库问答命令模板](30_References/kb-qa-command-demos.md)。
+
 ## 笔记格式
 
 推荐每篇笔记包含 YAML front matter：
